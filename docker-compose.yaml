@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  ing-app-api:
+    image: ing-app-api
+    ports:
+      - "80:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+    networks:
+      - my_network
+  ing-app-react:
+    image: ing-app-react
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "8080:80"
+    networks:
+      - my_network
+  portainer:
+    image: portainer/portainer-ce
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    networks:
+      - my_network
+
+volumes:
+  portainer_data:
+
+networks:
+  my_network:
+    driver: bridge
