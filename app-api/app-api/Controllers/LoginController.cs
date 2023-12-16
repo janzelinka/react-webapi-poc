@@ -11,10 +11,6 @@ namespace ing_app_api.Controllers
     [Route("[controller]")]
     public class LoginController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
 
         private readonly ILogger<WeatherForecastController> _logger;
 
@@ -29,12 +25,19 @@ namespace ing_app_api.Controllers
             // Validate username and password against Dynamics 365 or your authentication system
             // Assuming successful authentication
             var userId = "123"; // Replace with user ID obtained from Dynamics 365 or your system
+            var userName = "janko";
+            var roleId = 1;
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes("tD6GmsZZjCj6bvcbPDLM4gs5UhQcDOuOtD6GmsZZjCj6bvcbPDLM4gs5UhQcDOuO"); // Replace with your secret key from config
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim("id", userId) }),
+                Subject = new ClaimsIdentity(new[] { 
+                    new Claim("id", userId)
+                    //, 
+                    // new Claim("userName", userName),  
+                    // new Claim("roleId", roleId)
+                }),
                 Expires = DateTime.UtcNow.AddHours(1), // Token expiration time
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
