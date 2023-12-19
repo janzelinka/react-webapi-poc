@@ -1,17 +1,17 @@
-import React from "react";
+import React from 'react';
 import {
   List,
   ListItemButton,
   ListItemIcon,
   ListItemText,
-} from "@mui/material";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import PeopleIcon from "@mui/icons-material/People";
+} from '@mui/material';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import PeopleIcon from '@mui/icons-material/People';
 
 export const MainMenu = () => {
   return (
     <List component="nav">
-      {" "}
+      {' '}
       <React.Fragment>
         <ListItemButton>
           <ListItemIcon>

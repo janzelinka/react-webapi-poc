@@ -1,6 +1,13 @@
 const path = require("path");
+const ESLintPlugin = require("eslint-webpack-plugin");
 
 module.exports = {
+  plugins: [
+    new ESLintPlugin({
+      extensions: ["ts", "tsx"],
+      files: ["src/**/*.ts", "src/**/*.tsx"],
+    }),
+  ],
   entry: "./src/index.tsx",
   resolve: {
     extensions: [".tsx", ".ts", ".js", ".jsx"],
@@ -26,6 +33,7 @@ module.exports = {
     port: 3000, // You can change the port number if needed
     hot: true,
     proxy: {
+      "/Login": "http://localhost:5262",
       "/WeatherForecast": "http://localhost:5262",
     },
   },
