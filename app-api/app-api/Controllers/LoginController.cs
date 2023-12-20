@@ -36,7 +36,7 @@ namespace ing_app_api.Controllers
                     new Claim("userName", userName),
                     new Claim("roleId", roleId.ToString())
                 }),
-                Expires = DateTime.UtcNow.AddHours(1), // Token expiration time
+                Expires = DateTime.UtcNow.AddMinutes(1), // Token expiration time
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 
@@ -50,7 +50,7 @@ namespace ing_app_api.Controllers
         [Authorize]
         public IActionResult Auth()
         {
-            return Ok();
+            return Ok("abc");
         }
 
 

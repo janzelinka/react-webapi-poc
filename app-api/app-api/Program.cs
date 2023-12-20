@@ -44,8 +44,8 @@ if (app.Environment.IsDevelopment())
 }
 
 builder.Services.AddCors();
-app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:8080"));
-app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://host.docker.internal:8080"));
+app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:5262"));
+app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:8081"));
 
 app.UseHttpsRedirection();
 
