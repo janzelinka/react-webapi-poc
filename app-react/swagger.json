@@ -5,11 +5,12 @@
     "version": "1.0"
   },
   "paths": {
-    "/Login/login": {
+    "/Login": {
       "post": {
         "tags": [
           "Login"
         ],
+        "operationId": "Login",
         "parameters": [
           {
             "name": "username",
@@ -28,12 +29,27 @@
         ],
         "responses": {
           "200": {
-            "description": "Success"
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
           }
         }
-      }
-    },
-    "/Login": {
+      },
       "get": {
         "tags": [
           "Login"
@@ -87,6 +103,16 @@
   },
   "components": {
     "schemas": {
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "WeatherForecast": {
         "type": "object",
         "properties": {

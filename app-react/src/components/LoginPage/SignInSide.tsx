@@ -12,6 +12,8 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { LoginApi, LoginResponse } from '../../api';
+import { AxiosResponse } from 'axios';
 // import { useSelector, useDispatch } from 'react-redux';
 // import { RootState } from '../../stores/store';
 // import { WeatherForecastService } from "../../api";
@@ -37,17 +39,22 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-export default function SignInSide() {
+interface SignInSideProps {
+  loginApi: LoginApi;
+}
+
+export default function SignInSide({ loginApi }: SignInSideProps) {
   // const count = useSelector((state: RootState) => state.login);
   // const dispatch = useDispatch();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    loginApi
+      .login(data.get('email')?.toString(), data.get('password')?.toString())
+      .then((response: AxiosResponse<LoginResponse>) => {
+        console.log(response.data.token);
+      });
 
     // WeatherForecastService.getWeatherForecast().then((response) => {
     //   console.log(response);
