@@ -14,6 +14,7 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { LoginApi, LoginResponse } from '../../api';
 import { AxiosResponse } from 'axios';
+import { useNavigate } from 'react-router-dom';
 // import { useSelector, useDispatch } from 'react-redux';
 // import { RootState } from '../../stores/store';
 // import { WeatherForecastService } from "../../api";
@@ -46,24 +47,22 @@ interface SignInSideProps {
 export default function SignInSide({ loginApi }: SignInSideProps) {
   // const count = useSelector((state: RootState) => state.login);
   // const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     loginApi
       .login(data.get('email')?.toString(), data.get('password')?.toString())
       .then((response: AxiosResponse<LoginResponse>) => {
-        console.log(response.data.token);
+        if (response.data.token) {
+          window.localStorage.setItem('token', response.data.token);
+          // redirect('/dashboard');
+          navigate('/dashboard');
+        }
+      })
+      .catch((e: Error) => {
+        console.error(`Error during login `, e.message);
       });
-
-    // WeatherForecastService.getWeatherForecast().then((response) => {
-    //   console.log(response);
-    // });
-
-    // dispatch(
-    //   //@ts-ignore
-    //   login({ userName: data.get("email"), password: data.get("password") })
-    // );
   };
 
   return (
@@ -153,7 +152,6 @@ export default function SignInSide({ loginApi }: SignInSideProps) {
                   </Link>
                 </Grid>
               </Grid>
-              {/* <Copyright sx={{ mt: 5 }} /> */}
             </Box>
           </Box>
         </Grid>

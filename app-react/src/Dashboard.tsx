@@ -5,7 +5,6 @@ import MuiDrawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
@@ -13,8 +12,6 @@ import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import Link from '@mui/material/Link';
-import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import Chart from './Chart';
@@ -22,27 +19,10 @@ import Deposits from './Deposits';
 import Orders from './Orders';
 import Checkout from './components/Wizard/Checkout';
 
-import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from 'recharts';
-import { ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { PieChart, Pie, ResponsiveContainer } from 'recharts';
+// import { ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { MainMenu } from './components/MainMenu';
-
-function Copyright(props: any) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import { LoginApi } from './api';
 
 const drawerWidth: number = 240;
 
@@ -97,21 +77,31 @@ const Drawer = styled(MuiDrawer, {
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-export default function Dashboard() {
+export default function Dashboard({ loginApi }: { loginApi: LoginApi }) {
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
   };
 
   useEffect(() => {
-    fetch('/WeatherForecast')
-      .then((response) => {
-        return response.json();
+    // eslint-disable-next-line no-debugger
+    // debugger;
+    loginApi
+      .loginGet({
+        headers: {
+          Authorization: 'bearer ' + window.localStorage.getItem('token'),
+        },
       })
-      .then((result) => {
-        console.log(result);
-      });
-  }, []);
+      .then(() => {});
+    // fetch('/Login', {
+    //   method: 'GET',
+    //   headers: {
+    //     Authorization: 'Bearer ' + window.localStorage.getItem('token'),
+    //   },
+    // }).then((r) => {
+    //   console.log(r);
+    // });
+  }, [loginApi]);
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -132,9 +122,7 @@ export default function Dashboard() {
                 marginRight: '36px',
                 ...(open && { display: 'none' }),
               }}
-            >
-              <MenuIcon />
-            </IconButton>
+            ></IconButton>
             <Typography
               component="h1"
               variant="h6"
@@ -222,7 +210,7 @@ export default function Dashboard() {
                 <Example />
               </Grid>
             </Grid>
-            <Copyright sx={{ pt: 4 }} />
+            {/* <Copyright sx={{ pt: 4 }} /> */}
           </Container>
         </Box>
       </Box>
@@ -235,19 +223,6 @@ const data01 = [
   { name: 'Group B', value: 300 },
   { name: 'Group C', value: 300 },
   { name: 'Group D', value: 200 },
-];
-const data02 = [
-  { name: 'A1', value: 100 },
-  { name: 'A2', value: 300 },
-  { name: 'B1', value: 100 },
-  { name: 'B2', value: 80 },
-  { name: 'B3', value: 40 },
-  { name: 'B4', value: 30 },
-  { name: 'B5', value: 50 },
-  { name: 'C1', value: 100 },
-  { name: 'C2', value: 200 },
-  { name: 'D1', value: 150 },
-  { name: 'D2', value: 50 },
 ];
 
 class Example extends PureComponent {

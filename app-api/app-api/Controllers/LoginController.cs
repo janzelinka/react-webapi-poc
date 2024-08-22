@@ -5,6 +5,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using app_api.ViewModels;
+using app.Repositories;
+using app.Models;
+using api.ViewModels;
+using api.Repositories;
+using app.Services;
 
 namespace ing_app_api.Controllers
 {
@@ -12,47 +17,40 @@ namespace ing_app_api.Controllers
     [Route("[controller]")]
     public class LoginController : ControllerBase
     {
+        private readonly IUsersService usersService;
 
+        public IAuthService AuthService { get; }
 
-        public LoginController()
+        public LoginController(IUsersService usersService, IAuthService authService)
         {
+            this.usersService = usersService;
+            AuthService = authService;
         }
 
         [HttpPost(Name = "Login")]
-        public ActionResult<LoginResponse> Login(string username, string password)
+        public async Task<ActionResult> Login(string username, string password)
         {
-            // Validate username and password against Dynamics 365 or your authentication system
-            // Assuming successful authentication
-            var userId = "123"; // Replace with user ID obtained from Dynamics 365 or your system
-            var userName = "janko";
-            var roleId = 1;
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("tD6GmsZZjCj6bvcbPDLM4gs5UhQcDOuOtD6GmsZZjCj6bvcbPDLM4gs5UhQcDOuO"); // Replace with your secret key from config
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[] {
-                    new Claim("id", userId),
-                    new Claim("userName", userName),
-                    new Claim("roleId", roleId.ToString())
-                }),
-                Expires = DateTime.UtcNow.AddMinutes(1), // Token expiration time
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var tokenString = tokenHandler.WriteToken(token);
-
-            return Ok(new LoginResponse() { Token = tokenString });
+            await AuthService.LoginAsync(username, password);
+            return Ok();
         }
 
         [HttpGet]
-        [Authorize]
-        public IActionResult Auth()
+        [AllowAnonymous]
+        [Route("[controller]/GetAllUsers")]
+        public IActionResult GetAllUsers()
         {
-            return Ok("abc");
+            var users = usersService.GetAll();
+            return Ok(users);
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("[controller]/CreateUser")]
+        public IActionResult Create(CreateUserViewModel user)
+        {
+            usersService.Create(user);
+            return Ok("Created");
+        }
 
     }
 }

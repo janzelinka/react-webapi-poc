@@ -26,15 +26,23 @@ const config = {
     ],
   },
   devServer: {
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers':
+        'Origin, Authorization, X-Requested-With, Content-Type, Accept',
+    },
     static: {
       directory: path.join(__dirname, 'dist'),
     },
     compress: true,
-    port: 3000, // You can change the port number if needed
+    port: 8081, // You can change the port number if needed
     hot: true,
     proxy: {
-      '/Login': 'http://localhost:5262',
-      '/WeatherForecast': 'http://localhost:5262',
+      '/Login': {
+        target: 'https://localhost:7152',
+        secure: false,
+      }, // Your API server address
+      '/WeatherForecast': 'https://localhost:7152',
     },
   },
 };
