@@ -5,37 +5,16 @@ import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { LoginApi, LoginResponse } from '../../api';
-import { AxiosResponse } from 'axios';
-import { useNavigate } from 'react-router-dom';
-// import { useSelector, useDispatch } from 'react-redux';
-// import { RootState } from '../../stores/store';
-// import { WeatherForecastService } from "../../api";
-
-// function Copyright(props: {}) {
-//   return (
-//     <Typography
-//       variant="body2"
-//       color="text.secondary"
-//       align="center"
-//       {...props}
-//     >
-//       {'Copyright © '}
-//       <Link color="inherit" href="https://mui.com/">
-//         Your Website
-//       </Link>{' '}
-//       {new Date().getFullYear()}
-//       {'.'}
-//     </Typography>
-//   );
-// }
+import { LoginApi } from '../../api';
+import { AxiosError, AxiosResponse } from 'axios';
+import { useAuth } from '../../contexts/AuthContext';
+import { Link, useNavigate } from 'react-router-dom';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -45,24 +24,16 @@ interface SignInSideProps {
 }
 
 export default function SignInSide({ loginApi }: SignInSideProps) {
-  // const count = useSelector((state: RootState) => state.login);
-  // const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { setIsAuthenticated } = useAuth();
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     loginApi
       .login(data.get('email')?.toString(), data.get('password')?.toString())
-      .then((response: AxiosResponse<LoginResponse>) => {
-        if (response.data.token) {
-          window.localStorage.setItem('token', response.data.token);
-          // redirect('/dashboard');
-          navigate('/dashboard');
-        }
-      })
-      .catch((e: Error) => {
-        console.error(`Error during login `, e.message);
-      });
+      .then(handleLoginCallback())
+      .catch(handleLoginError());
   };
 
   return (
@@ -117,6 +88,7 @@ export default function SignInSide({ loginApi }: SignInSideProps) {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                value={'zelo'}
               />
               <TextField
                 margin="normal"
@@ -127,6 +99,7 @@ export default function SignInSide({ loginApi }: SignInSideProps) {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                value={'12000'}
               />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
@@ -142,14 +115,12 @@ export default function SignInSide({ loginApi }: SignInSideProps) {
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <Link href="#" variant="body2">
+                  {/* <Link href="#" variant="body2">
                     Forgot password?
-                  </Link>
+                  </Link> */}
                 </Grid>
                 <Grid item>
-                  <Link href="#" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
+                  <Link to="/register">{"Don't have an account? Sign Up"}</Link>
                 </Grid>
               </Grid>
             </Box>
@@ -158,4 +129,27 @@ export default function SignInSide({ loginApi }: SignInSideProps) {
       </Grid>
     </ThemeProvider>
   );
+
+  function handleLoginError():
+    | ((reason: any) => void | PromiseLike<void>)
+    | null
+    | undefined {
+    return (e: AxiosError) => {
+      if (e.response?.status == 401) {
+        setIsAuthenticated(false);
+      }
+    };
+  }
+
+  function handleLoginCallback():
+    | ((value: AxiosResponse<void, any>) => void | PromiseLike<void>)
+    | null
+    | undefined {
+    return (response: AxiosResponse) => {
+      if (response?.status == 200) {
+        setIsAuthenticated(true);
+        navigate('/dashboard');
+      }
+    };
+  }
 }

@@ -1,12 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit';
-import login from '../features/login';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginReducer, registerReducer } from '../features/login';
 
 export const store = configureStore({
   reducer: {
-    login: login,
+    login: loginReducer,
+    register: registerReducer,
   },
 });
 
 export type RootState = ReturnType<typeof store.getState>;
-// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch;
+
+export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
+export const useAppSelector = useSelector.withTypes<RootState>();
