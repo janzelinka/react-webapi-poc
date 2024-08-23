@@ -1,10 +1,10 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 export const loginSlice = createSlice({
-  name: 'login',
+  name: "login",
   initialState: {
-    userName: '',
-    password: '',
+    userName: "",
+    password: "",
   },
   reducers: {
     login: (state, action) => {
@@ -15,12 +15,12 @@ export const loginSlice = createSlice({
 });
 
 export const addNewUserSlice = createSlice({
-  name: 'addNewUser',
+  name: "addNewUser",
   initialState: {
-    Email: '',
-    Password: '',
-    FirstName: '',
-    LastName: '',
+    Email: "",
+    Password: "",
+    FirstName: "",
+    LastName: "",
   },
   reducers: {
     register: (state, action) => {
@@ -32,9 +32,29 @@ export const addNewUserSlice = createSlice({
   },
 });
 
+export const signUpSlice = createSlice({
+  name: "signUp",
+  initialState: {
+    Email: "",
+    Password: "",
+    FirstName: "",
+    LastName: "",
+  },
+  reducers: {
+    signUp: (state, action) => {
+      state.Email = action.payload.UserName;
+      state.Password = action.payload.Password;
+      state.FirstName = action.payload.FirstName;
+      state.LastName = action.payload.LastName;
+    },
+  },
+});
+
 // Action creators are generated for each case reducer function
 export const { login } = loginSlice.actions;
 export const { register } = addNewUserSlice.actions;
+export const { signUp } = signUpSlice.actions;
 
 export const loginReducer = loginSlice.reducer;
 export const registerReducer = addNewUserSlice.reducer;
+export const signUpReducer = signUpSlice.reducer;

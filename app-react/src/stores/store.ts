@@ -1,11 +1,16 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { useDispatch, useSelector } from 'react-redux';
-import { loginReducer, registerReducer } from '../features/login';
+import { configureStore } from "@reduxjs/toolkit";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  loginReducer,
+  registerReducer,
+  signUpReducer,
+} from "../features/login";
 
 export const store = configureStore({
   reducer: {
     login: loginReducer,
     register: registerReducer,
+    signUp: signUpReducer,
   },
 });
 

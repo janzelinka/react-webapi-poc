@@ -1,21 +1,25 @@
-import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-
+import * as React from "react";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Link from "@mui/material/Link";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import { useAppDispatch, useAppSelector } from "../stores/store";
+import { signUp as signUpAction } from "../features/login";
 export const RegisterForm = () => {
+  const dispatch = useAppDispatch();
+  const signUp = useAppSelector((state) => state.signUp);
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    console.log(signUp);
   };
 
   return (
@@ -24,12 +28,12 @@ export const RegisterForm = () => {
       <Box
         sx={{
           marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
@@ -46,6 +50,12 @@ export const RegisterForm = () => {
                 id="firstName"
                 label="First Name"
                 autoFocus
+                defaultValue={signUp.FirstName}
+                onChange={(e) =>
+                  dispatch(
+                    signUpAction({ ...signUp, FirstName: e.target.value })
+                  )
+                }
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -56,6 +66,12 @@ export const RegisterForm = () => {
                 label="Last Name"
                 name="lastName"
                 autoComplete="family-name"
+                defaultValue={signUp.LastName}
+                onChange={(e) =>
+                  dispatch(
+                    signUpAction({ ...signUp, LastName: e.target.value })
+                  )
+                }
               />
             </Grid>
             <Grid item xs={12}>
@@ -66,6 +82,12 @@ export const RegisterForm = () => {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                defaultValue={signUp.Email}
+                onChange={(e) =>
+                  dispatch(
+                    signUpAction({ ...signUp, UserName: e.target.value })
+                  )
+                }
               />
             </Grid>
             <Grid item xs={12}>
@@ -77,6 +99,12 @@ export const RegisterForm = () => {
                 type="password"
                 id="password"
                 autoComplete="new-password"
+                defaultValue={signUp.Password}
+                onChange={(e) =>
+                  dispatch(
+                    signUpAction({ ...signUp, Password: e.target.value })
+                  )
+                }
               />
             </Grid>
             <Grid item xs={12}>
