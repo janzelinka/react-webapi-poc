@@ -1,15 +1,9 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using app_api.ViewModels;
-using app.Repositories;
-using app.Models;
 using api.ViewModels;
-using api.Repositories;
 using app.Services;
+using System.Net;
+using app.Responses;
 
 namespace ing_app_api.Controllers
 {
@@ -30,24 +24,36 @@ namespace ing_app_api.Controllers
         [HttpPost(Name = "Login")]
         public async Task<ActionResult> Login(string username, string password)
         {
-            await AuthService.LoginAsync(username, password);
-            return Ok();
+            var result = await AuthService.LoginAsync(username, password);
+
+            if (result)
+            {
+                return Ok();
+            }
+
+            return Unauthorized();
         }
 
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize]
         [Route("[controller]/GetAllUsers")]
-        public IActionResult GetAllUsers()
+        public ActionResult<List<GetAllUsersViewModel>> GetAllUsers()
         {
-            var users = usersService.GetAll();
+            var users = usersService.GetAll().ToList();
             return Ok(users);
         }
 
         [HttpPost]
-        [AllowAnonymous]
         [Route("[controller]/CreateUser")]
-        public IActionResult Create(CreateUserViewModel user)
+        public ActionResult<CreateUserResponse> Create(CreateUserViewModel user)
         {
+            if (!ModelState.IsValid) {
+                var errorList = ModelState.ToDictionary(
+                    kvp => kvp.Key,
+                    kvp => kvp.Value?.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+                return Ok(new CreateUserResponse { ErrorList = errorList });
+            }
             usersService.Create(user);
             return Ok("Created");
         }

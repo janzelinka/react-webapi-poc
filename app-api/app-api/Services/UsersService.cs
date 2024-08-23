@@ -1,8 +1,5 @@
-using System;
 using api.Repositories;
 using api.ViewModels;
-using app.Models;
-using app.Repositories;
 
 namespace app.Services
 {
@@ -10,7 +7,7 @@ namespace app.Services
     public interface IUsersService
     {
         Guid Create(CreateUserViewModel item);
-        IEnumerable<User> GetAll();
+        IEnumerable<GetAllUsersViewModel> GetAll();
     }
     public class UsersService : IUsersService
     {
@@ -35,9 +32,19 @@ namespace app.Services
         //     throw new NotImplementedException();
         // }
 
-        public IEnumerable<User> GetAll()
+        public IEnumerable<GetAllUsersViewModel> GetAll()
         {
-            return UserRepository.GetAllUsers();
+            return UserRepository
+                .GetAllUsers()
+                .Select(
+                    user => new GetAllUsersViewModel {
+                        Email = user.Email,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        Id = user.Id,
+                    }
+                )
+                .AsEnumerable();
         }
 
         // public Task<IEnumerable<User>> GetAllAsync()

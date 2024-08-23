@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
 using app.Models;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace app.Repositories
@@ -22,7 +19,7 @@ namespace app.Repositories
     {
         public ApiDataContext Context { get; }
 
-        private readonly DbSet<T> DbSet;
+        protected readonly DbSet<T> DbSet;
 
         public BaseRepository(ApiDataContext context)
         {
@@ -45,7 +42,7 @@ namespace app.Repositories
             throw new NotImplementedException();
         }
 
-        public IEnumerable<T> Filter(T criteria)
+        public virtual IEnumerable<T> Filter(T criteria)
         {
             throw new NotImplementedException();
         }

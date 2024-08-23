@@ -1,11 +1,6 @@
-using System.Text;
 using api.Repositories;
-using app.Models;
-using app.Repositories;
 using app.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 builder
@@ -14,11 +9,22 @@ builder
 .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
 .AddCookie(options =>
 {
-    options.LoginPath = "/Account/Login";
-    options.LogoutPath = "/Account/Logout";
     options.Cookie.Name = "ZeloApiCookie";
     options.ExpireTimeSpan = TimeSpan.FromMinutes(60); // Customize cookie expiration as needed
     options.SlidingExpiration = true; // Extends the cookie if the user is active
+    options.Events = new CookieAuthenticationEvents
+    {
+        OnRedirectToLogin = context =>
+        {
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            return Task.CompletedTask;
+        },
+        OnRedirectToAccessDenied = context =>
+        {
+            context.Response.StatusCode = StatusCodes.Status403Forbidden;
+            return Task.CompletedTask;
+        },
+    };
 });
 // Add services to the container.
 builder.Services.AddDbContext<ApiDataContext>();
@@ -45,7 +51,11 @@ builder.Services.AddTransient<IUsersService, UsersService>();
 //         };
 //     });
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
+        {
+            // Suppress the automatic model state validation response
+            options.SuppressModelStateInvalidFilter = true;
+        });;
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 builder.Services.AddEndpointsApiExplorer();

@@ -13,35 +13,38 @@ namespace app.Services
 {
     public interface IAuthService
     {
-        Task LoginAsync(string email, string password);
+        Task<bool> LoginAsync(string email, string password);
     }
     public class AuthService : IAuthService
     {
-        private readonly IUsersService usersService;
         private readonly IHttpContextAccessor accessor;
+        private readonly IUserRepository userRepository;
 
-        public AuthService(IUsersService usersService, IHttpContextAccessor accessor)
+        public AuthService(
+            IHttpContextAccessor accessor,
+            IUserRepository userRepository
+        )
         {
-            this.usersService = usersService;
             this.accessor = accessor;
+            this.userRepository = userRepository;
         }
-        public async Task LoginAsync(string email, string password)
+        public async Task<bool> LoginAsync(string email, string password)
         {
 
-            var userByEmail = usersService.GetAll().ToList().Where(x => x.Email == email).FirstOrDefault();
+            var userByEmail = userRepository.GetUserByEmail(email);
 
             if (userByEmail == null || !PasswordHelper.VerifyPassword(password, userByEmail.PasswordHash, userByEmail.PasswordSalt))
             {
-                return;
+                return false;
             }
 
             // If the credentials are valid, sign in the user
             var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.Name, userByEmail.FirstName + userByEmail.LastName),
-            new Claim(ClaimTypes.NameIdentifier, userByEmail.Id.ToString()),
-            // Add other claims as needed
-        };
+            {
+                new Claim(ClaimTypes.Name, userByEmail.FirstName + userByEmail.LastName),
+                new Claim(ClaimTypes.NameIdentifier, userByEmail.Id.ToString()),
+                // Add other claims as needed
+            };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
@@ -51,11 +54,15 @@ namespace app.Services
                 ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(60) // Set cookie expiration time
             };
 
-            // HttpContext.
+            if (accessor.HttpContext == null) {
+                return false;
+            }
             await accessor.HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity),
                 authProperties);
+
+            return true;
         }
 
 

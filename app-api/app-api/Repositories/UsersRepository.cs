@@ -11,6 +11,8 @@ namespace api.Repositories
     {
         Guid CreateUser(CreateUserViewModel item);
         IEnumerable<User> GetAllUsers();
+
+        User GetUserByEmail(string email);
     }
     public class UserRepository : BaseRepository<User>, IUserRepository
     {
@@ -42,5 +44,9 @@ namespace api.Repositories
             return base.GetAll();
         }
 
+        public User GetUserByEmail(string email)
+        {
+            return Context.Users?.Where(u => u.Email.Equals(email)).FirstOrDefault() ?? throw new Exception("User for specific email not found");
+        }
     }
 }
