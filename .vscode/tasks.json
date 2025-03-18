@@ -1,65 +1,70 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "type": "docker-build",
-            "label": "docker-build: debug",
-            "dependsOn": [
-                "build"
-            ],
-            "dockerBuild": {
-                "tag": "ingapp:dev",
-                "target": "base",
-                "dockerfile": "${workspaceFolder}/ing-app-api/ing-app-api/Dockerfile",
-                "context": "${workspaceFolder}",
-                "pull": true
-            },
-            "netCore": {
-                "appProject": "${workspaceFolder}/ing-app-api/ing-app-api/ing-app-api.csproj"
-            }
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "docker-build",
+      "label": "docker-build: debug",
+      "dependsOn": ["build"],
+      "dockerBuild": {
+        "tag": "ingapp:dev",
+        "target": "base",
+        "dockerfile": "${workspaceFolder}/ing-app-api/ing-app-api/Dockerfile",
+        "context": "${workspaceFolder}",
+        "pull": true
+      },
+      "netCore": {
+        "appProject": "${workspaceFolder}/ing-app-api/ing-app-api/ing-app-api.csproj"
+      }
+    },
+    {
+      "type": "docker-build",
+      "label": "docker-build: release",
+      "dependsOn": ["build"],
+      "dockerBuild": {
+        "tag": "ingapp:latest",
+        "dockerfile": "${workspaceFolder}/ing-app-api/ing-app-api/Dockerfile",
+        "context": "${workspaceFolder}",
+        "platform": {
+          "os": "linux",
+          "architecture": "amd64"
         },
-        {
-            "type": "docker-build",
-            "label": "docker-build: release",
-            "dependsOn": [
-                "build"
-            ],
-            "dockerBuild": {
-                "tag": "ingapp:latest",
-                "dockerfile": "${workspaceFolder}/ing-app-api/ing-app-api/Dockerfile",
-                "context": "${workspaceFolder}",
-                "platform": {
-                    "os": "linux",
-                    "architecture": "amd64"
-                },
-                "pull": true
-            },
-            "netCore": {
-                "appProject": "${workspaceFolder}/ing-app-api/ing-app-api/ing-app-api.csproj"
-            }
-        },
-        {
-            "type": "docker-run",
-            "label": "docker-run: debug",
-            "dependsOn": [
-                "docker-build: debug"
-            ],
-            "dockerRun": {},
-            "netCore": {
-                "appProject": "${workspaceFolder}/ing-app-api/ing-app-api/ing-app-api.csproj",
-                "enableDebugging": true
-            }
-        },
-        {
-            "type": "docker-run",
-            "label": "docker-run: release",
-            "dependsOn": [
-                "docker-build: release"
-            ],
-            "dockerRun": {},
-            "netCore": {
-                "appProject": "${workspaceFolder}/ing-app-api/ing-app-api/ing-app-api.csproj"
-            }
-        }
-    ]
+        "pull": true
+      },
+      "netCore": {
+        "appProject": "${workspaceFolder}/ing-app-api/ing-app-api/ing-app-api.csproj"
+      }
+    },
+    {
+      "type": "docker-run",
+      "label": "docker-run: debug",
+      "dependsOn": ["docker-build: debug"],
+      "dockerRun": {},
+      "netCore": {
+        "appProject": "${workspaceFolder}/ing-app-api/ing-app-api/ing-app-api.csproj",
+        "enableDebugging": true
+      }
+    },
+    {
+      "type": "docker-run",
+      "label": "docker-run: release",
+      "dependsOn": ["docker-build: release"],
+      "dockerRun": {},
+      "netCore": {
+        "appProject": "${workspaceFolder}/ing-app-api/ing-app-api/ing-app-api.csproj"
+      }
+    },
+    {
+      "type": "docker-build",
+      "label": "docker-build",
+      "platform": "node",
+      "dockerBuild": {
+        "dockerfile": "${workspaceFolder}/app-react/Dockerfile",
+        "context": "${workspaceFolder}/app-react",
+        "pull": true
+      },
+      "node": {
+        "package": "${workspaceFolder}/app-react/package.json"
+      }
+    }
+  ]
 }
