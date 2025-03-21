@@ -4,6 +4,7 @@ using api.ViewModels;
 using app.Services;
 using System.Net;
 using app.Responses;
+using Microsoft.EntityFrameworkCore;
 
 namespace ing_app_api.Controllers
 {
@@ -14,16 +15,19 @@ namespace ing_app_api.Controllers
         private readonly IUsersService usersService;
 
         public IAuthService AuthService { get; }
+        public ApiDataContext Ctx { get; }
 
-        public LoginController(IUsersService usersService, IAuthService authService)
+        public LoginController(IUsersService usersService, IAuthService authService, ApiDataContext ctx)
         {
             this.usersService = usersService;
             AuthService = authService;
+            Ctx = ctx;
         }
 
         [HttpPost(Name = "Login")]
         public async Task<ActionResult> Login(string username, string password)
         {
+            var categories = Ctx.Categories.Include(c => c.Products).ToList();
             var result = await AuthService.LoginAsync(username, password);
 
             if (result)
