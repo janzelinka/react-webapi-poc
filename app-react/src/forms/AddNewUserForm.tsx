@@ -1,4 +1,3 @@
-import * as React from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
@@ -6,7 +5,6 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import { useAppDispatch, useAppSelector } from "../stores/store";
 import { register as registerAction } from "../features/login";
-import { FormHelperText } from "@mui/material";
 import { ValidationMessage } from "../components/FormHelperText/FormHelperText";
 
 export interface AddNewUserFormProps {

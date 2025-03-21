@@ -1,7 +1,7 @@
-import React, { createContext, useContext, useState, useMemo } from 'react';
+import { createContext, useContext, useState, useMemo } from 'react';
 
 const AuthContext = createContext({
-  setIsAuthenticated: (val: boolean) => {},
+  setIsAuthenticated: (val: boolean) => { console.log(val); },
   isAuthenticated: false,
 });
 

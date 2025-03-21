@@ -1,5 +1,5 @@
 import { Box, Button, Modal, Paper, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface ModalProps {
   form: JSX.Element;
@@ -24,7 +24,7 @@ export const CustomModal = ({
 
   const _onOk = async () => {
     const result = await onOk();
-    result && setVisible(false);
+    if (result) setVisible(false);
   };
 
   const _onCancel = () => {

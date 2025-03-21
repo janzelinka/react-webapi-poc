@@ -31,7 +31,7 @@ export const UsersOverview = ({ loginApi }: { loginApi: LoginApi }) => {
       .then((result) => {
         setUsers(result.data);
       })
-      .catch((error) => {});
+      .catch();
   }, [loginApi]);
 
   const addNewUser = async () => {
