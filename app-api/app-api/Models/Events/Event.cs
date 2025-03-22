@@ -24,13 +24,23 @@ namespace api.Models.Events {
 
     public class City : BaseEntity {
         public string Name {get;set;} = string.Empty;
+
+        public required District District {get;set;}
         public string Code {get;set;} = string.Empty;
         public string PostalCode {get;set;} = string.Empty;
         public int Population {get;set;}
     }
 
-    public class Region : BaseEntity {
+    public class District : BaseEntity {
         public List<City> Cities {get;set;} = new List<City>();
+        public required Region Region { get;set; }
+        public string Name {get;set;} = string.Empty;
+        public string Code {get;set;} = string.Empty;
+    }
+
+    public class Region : BaseEntity {
+        public List<District> Districts {get;set;} = new List<District>();
+        public required Country Country { get;set; }
         public string Name {get;set;} = string.Empty;
         public string Code {get;set;} = string.Empty;
     }

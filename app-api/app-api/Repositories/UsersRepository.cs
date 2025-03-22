@@ -7,7 +7,7 @@ using app.Repositories;
 
 namespace api.Repositories
 {
-    public interface IUserRepository
+    public interface IUserRepository : IBaseRepository<User>
     {
         Guid CreateUser(CreateUserViewModel item);
         IEnumerable<User> GetAllUsers();

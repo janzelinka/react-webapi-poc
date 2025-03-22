@@ -6,6 +6,6 @@
       "type": "dotnet",
       "request": "launch",
       "projectPath": "${workspaceFolder}/app-api/app-api/app-api.csproj"
-    }
+    },
   ]
 }

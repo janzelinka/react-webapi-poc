@@ -1,6 +1,9 @@
+using System.Text.Json.Serialization;
 using api.Repositories;
 using app.Services;
+using appapi.Seeds;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 builder
@@ -29,6 +32,13 @@ builder
 // Add services to the container.
 builder.Services.AddDbContext<ApiDataContext>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
+
+builder.Services.AddTransient<ICountryRepository, CountryRepository>();
+builder.Services.AddTransient<IRegionRepository, RegionRepository>();
+builder.Services.AddTransient<ICityRepository, CityRepository>();
+builder.Services.AddTransient<IDistrictRepository, DistrictRepository>();
+builder.Services.AddTransient<CitiesSeeder>();
+
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<IUsersService, UsersService>();
 /* authentication */
@@ -63,6 +73,16 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+
+
+//seeding
+using (var scope = app.Services.CreateScope()) {
+    var seder = scope.ServiceProvider.GetRequiredService<CitiesSeeder>();
+    seder.Seed();
+}
+
+
+// countryRepo.Create(new api.Models.Events.Country{ Code = "SK", Name = "Slovenska republika", })
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

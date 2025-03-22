@@ -97,6 +97,9 @@ namespace ing_app_api.Migrations
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("DistrictId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -108,9 +111,6 @@ namespace ing_app_api.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("RegionId")
-                        .HasColumnType("TEXT");
-
                     b.Property<DateTime>("Updated")
                         .HasColumnType("TEXT");
 
@@ -119,7 +119,7 @@ namespace ing_app_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RegionId");
+                    b.HasIndex("DistrictId");
 
                     b.ToTable("Cities");
                 });
@@ -153,6 +153,42 @@ namespace ing_app_api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Countries");
+                });
+
+            modelBuilder.Entity("api.Models.Events.District", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("RegionId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Updated")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UpdatedBy")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RegionId");
+
+                    b.ToTable("District");
                 });
 
             modelBuilder.Entity("api.Models.Events.Event", b =>
@@ -277,7 +313,7 @@ namespace ing_app_api.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("CountryId")
+                    b.Property<Guid>("CountryId")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Created")
@@ -376,9 +412,24 @@ namespace ing_app_api.Migrations
 
             modelBuilder.Entity("api.Models.Events.City", b =>
                 {
-                    b.HasOne("api.Models.Events.Region", null)
+                    b.HasOne("api.Models.Events.District", "District")
                         .WithMany("Cities")
-                        .HasForeignKey("RegionId");
+                        .HasForeignKey("DistrictId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("District");
+                });
+
+            modelBuilder.Entity("api.Models.Events.District", b =>
+                {
+                    b.HasOne("api.Models.Events.Region", "Region")
+                        .WithMany("Districts")
+                        .HasForeignKey("RegionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Region");
                 });
 
             modelBuilder.Entity("api.Models.Events.Event", b =>
@@ -426,9 +477,13 @@ namespace ing_app_api.Migrations
 
             modelBuilder.Entity("api.Models.Events.Region", b =>
                 {
-                    b.HasOne("api.Models.Events.Country", null)
+                    b.HasOne("api.Models.Events.Country", "Country")
                         .WithMany("Regions")
-                        .HasForeignKey("CountryId");
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Country");
                 });
 
             modelBuilder.Entity("api.Models.Events.Category", b =>
@@ -443,6 +498,11 @@ namespace ing_app_api.Migrations
                     b.Navigation("Regions");
                 });
 
+            modelBuilder.Entity("api.Models.Events.District", b =>
+                {
+                    b.Navigation("Cities");
+                });
+
             modelBuilder.Entity("api.Models.Events.Order", b =>
                 {
                     b.Navigation("Products");
@@ -450,7 +510,7 @@ namespace ing_app_api.Migrations
 
             modelBuilder.Entity("api.Models.Events.Region", b =>
                 {
-                    b.Navigation("Cities");
+                    b.Navigation("Districts");
                 });
 #pragma warning restore 612, 618
         }
