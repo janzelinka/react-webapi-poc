@@ -1,24 +1,33 @@
-# Use the appropriate .NET runtime image as base
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+# Stage 1: Build and Apply Migrations
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS migration
 WORKDIR /app
-EXPOSE 80
+
+# Copy project files and restore dependencies
+COPY app-api/app-api.csproj ./
+RUN dotnet restore
+
+# Copy remaining source code
+COPY . ./
+RUN dotnet build -c Release -o /app/build
+
+# Generate SQLite database by running migrations
+ENV PATH="$PATH:/root/.dotnet/tools"
+
+RUN dotnet tool install --global dotnet-ef && cd app-api && dotnet ef database update
+
+# Stage 2: Final Runtime Image
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+WORKDIR /app
+
+# Copy the application files
+COPY --from=migration /app/build ./
+
+# Copy the generated SQLite database file
+COPY --from=migration /app/app-api/database.db /app/database.db
+
+EXPOSE 5000
 EXPOSE 443
+EXPOSE 80
 
-# Use the appropriate .NET SDK image to build the application
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /src
-COPY ["app-api/app-api.csproj", "app-api/"]
-RUN dotnet restore "app-api/app-api.csproj"
-COPY . .
-WORKDIR "/src/app-api"
-RUN dotnet build "app-api.csproj" -c Release -o /app/build
-
-# Publish the application
-FROM build AS publish
-RUN dotnet publish "app-api.csproj" -c Release -o /app/publish
-
-# Final image for running the published application
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
+# Start the application
 ENTRYPOINT ["dotnet", "app-api.dll"]

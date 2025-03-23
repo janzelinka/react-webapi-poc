@@ -17,7 +17,7 @@ public class ApiDataContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlite(
-            @"Data Source=databse.db");
+            @"Data Source=database.db");
     }
 
 }
