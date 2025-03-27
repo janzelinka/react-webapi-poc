@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using app.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +16,7 @@ namespace app.Repositories
         void Delete(T entity);
         Task<T> GetByIdAsync(Guid id);
         void DeleteRange(IEnumerable<T> entity);
+        public IQueryable<T> GetAll(params Expression<Func<T, object>>[] includes);
 
     };
     public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
@@ -112,6 +114,16 @@ namespace app.Repositories
             DbSet.Update(item);
 
             return item.Id;
+        }
+
+        public IQueryable<T> GetAll(params Expression<Func<T, object>>[] includes)
+        {
+            var query = DbSet.AsQueryable();
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+            return query;
         }
 
     }
