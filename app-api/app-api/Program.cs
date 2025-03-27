@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using api.Repositories;
 using app.Services;
 using appapi.Seeds;
@@ -73,6 +74,11 @@ public class Startup
 
         services
         .AddControllersWithViews()
+        .AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+            options.JsonSerializerOptions.PropertyNamingPolicy = null;
+        })
         .ConfigureApiBehaviorOptions(options =>
         {
             options.SuppressModelStateInvalidFilter = true;
@@ -89,7 +95,7 @@ public class Startup
         {
             app.UseSwagger();
             app.UseSwaggerUI();
-
+    
         }
         app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:5000"));
         app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:8081"));
