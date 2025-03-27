@@ -27,7 +27,7 @@ namespace ing_app_api.Controllers
         [HttpPost(Name = "Login")]
         public async Task<ActionResult> Login(string username, string password)
         {
-            var categories = Ctx.Categories.Include(c => c.Products).ToList();
+            // var categories = Ctx.Categories.Include(c => c.Products).ToList();
             var result = await AuthService.LoginAsync(username, password);
 
             if (result)

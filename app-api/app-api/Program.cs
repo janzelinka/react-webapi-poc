@@ -2,10 +2,6 @@ using api.Repositories;
 using app.Services;
 using appapi.Seeds;
 using Microsoft.AspNetCore.Authentication.Cookies;
-
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
-
 public class Program
 {
     public static void Main(string[] args)
@@ -15,6 +11,12 @@ public class Program
 
     public static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
+            .ConfigureAppConfiguration((hostingContext, config) =>
+            {
+                config.AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json",
+                    optional: true,
+                    reloadOnChange: false);
+            })
             .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder
@@ -34,7 +36,8 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddControllersWithViews();  // Add MVC support if you're using controllers and views
+        
+          // Add MVC support if you're using controllers and views
         services
         .AddHttpContextAccessor()
         .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -68,13 +71,14 @@ public class Startup
         services.AddTransient<IAuthService, AuthService>();
         services.AddTransient<IUsersService, UsersService>();
 
-        services.AddControllers().ConfigureApiBehaviorOptions(options =>
-                {
-                    options.SuppressModelStateInvalidFilter = true;
-                });
+        services
+        .AddControllersWithViews()
+        .ConfigureApiBehaviorOptions(options =>
+        {
+            options.SuppressModelStateInvalidFilter = true;
+        });
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
-        
 
     }
 
@@ -87,13 +91,22 @@ public class Startup
             app.UseSwaggerUI();
 
         }
-
-        app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:5262"));
+        app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:5000"));
         app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:8081"));
-
-        app.UseHttpsRedirection();
+        
+        // app.UseHttpsRedirection();
 
         app.UseAuthentication();
+        app.UseRouting();
         app.UseAuthorization();
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllers();
+        });
+        
+        using (var scope = app.ApplicationServices.CreateScope()) {
+            var seder = scope.ServiceProvider.GetRequiredService<CitiesSeeder>();
+            seder.Seed();
+        }
     }
 }

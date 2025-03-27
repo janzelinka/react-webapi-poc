@@ -9,10 +9,12 @@ namespace app.Repositories
         IEnumerable<T> GetAll();
         Task<IEnumerable<T>> GetAllAsync();
         IEnumerable<T> Filter(T criteria);
-        Guid Create(T item);
+        Guid Add(T item);
+        void AddRange(IEnumerable<T> items);
         Guid Update(T item);
-        Guid Delete(Guid id);
+        void Delete(T entity);
         Task<T> GetByIdAsync(Guid id);
+        void DeleteRange(IEnumerable<T> entity);
 
     };
     public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
@@ -26,7 +28,7 @@ namespace app.Repositories
             Context = context;
             DbSet = context.Set<T>();
         }
-        public virtual Guid Create(T item)
+        public virtual Guid Add(T item)
         {
             if (item == null)
             {
@@ -37,9 +39,26 @@ namespace app.Repositories
             return item.Id;
         }
 
-        public Guid Delete(Guid id)
+        public virtual void AddRange(IEnumerable<T> items)
         {
-            throw new NotImplementedException();
+            if (items == null)
+            {
+                throw new ArgumentNullException(string.Format("Called Create on entity {0}", typeof(T)));
+            }
+            Context.AddRange(items);
+            Context.SaveChanges();
+        }
+
+        public void Delete(T entity)
+        {
+            DbSet.Remove(entity);
+            Context.SaveChanges();
+        }
+
+        public void DeleteRange(IEnumerable<T> entity)
+        {
+            DbSet.RemoveRange(entity);
+            Context.SaveChanges();
         }
 
         public virtual IEnumerable<T> Filter(T criteria)

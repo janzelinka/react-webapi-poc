@@ -36,7 +36,7 @@ namespace api.Repositories
                 Id = user.Id,
             };
 
-            return base.Create(userEntity);
+            return base.Add(userEntity);
         }
 
         public IEnumerable<User> GetAllUsers()
