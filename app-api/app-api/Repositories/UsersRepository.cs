@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using api.ViewModels;
 using app.Helpers;
 using app.Models;
@@ -9,10 +7,9 @@ namespace api.Repositories
 {
     public interface IUserRepository : IBaseRepository<User>
     {
-        Guid CreateUser(CreateUserViewModel item);
+        Guid CreateUser(UsersViewModel item);
         IEnumerable<User> GetAllUsers();
-
-        User GetUserByEmail(string email);
+        User? GetUserByEmail(string email);
     }
     public class UserRepository : BaseRepository<User>, IUserRepository
     {
@@ -20,33 +17,20 @@ namespace api.Repositories
         {
         }
 
-        public Guid CreateUser(CreateUserViewModel item)
+        public Guid CreateUser(UsersViewModel item)
         {
-            var user = (CreateUserViewModel)item.Clone();
-            byte[] password;
-            byte[] passwordSalt;
-            PasswordHelper.CreatePasswordHash(item.Password, out password, out passwordSalt);
-
-            var userEntity = new User
-            {
-                Email = user.Email,
-                FirstName = user.FirstName,
-                PasswordHash = password,
-                PasswordSalt = passwordSalt,
-                Id = user.Id,
-            };
-
-            return base.Add(userEntity);
+            var userEntity = new User(item);
+            return Add(userEntity);
         }
 
         public IEnumerable<User> GetAllUsers()
         {
-            return base.GetAll();
+            return GetAll();
         }
 
-        public User GetUserByEmail(string email)
+        public User? GetUserByEmail(string email)
         {
-            return Context.Users?.Where(u => u.Email.Equals(email)).FirstOrDefault() ?? throw new Exception("User for specific email not found");
+            return Context.Users?.Where(u => u.Email.Equals(email)).FirstOrDefault();
         }
     }
 }

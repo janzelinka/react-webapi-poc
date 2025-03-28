@@ -1,14 +1,22 @@
 using api.Repositories;
 using api.ViewModels;
+using app.Models;
 
 namespace app.Services
 {
 
-    public interface IUsersService
+    public interface IUsersService : ICrudService<UsersViewModel>
     {
-        Guid Create(CreateUserViewModel item);
-        IEnumerable<GetAllUsersViewModel> GetAll();
+        //will contain all additional method
     }
+
+    public interface ICrudService<T> {
+        public Guid Create(T item);
+        public IEnumerable<T> GetAll();
+        public Guid Update(T item);
+        public void Delete(T item);
+    }
+
     public class UsersService : IUsersService
     {
         public IUserRepository UserRepository { get; }
@@ -17,7 +25,7 @@ namespace app.Services
             UserRepository = userRepository;
         }
 
-        public Guid Create(CreateUserViewModel item)
+        public Guid Create(UsersViewModel item)
         {
             return UserRepository.CreateUser(item);
         }
@@ -32,12 +40,12 @@ namespace app.Services
         //     throw new NotImplementedException();
         // }
 
-        public IEnumerable<GetAllUsersViewModel> GetAll()
+        public IEnumerable<UsersViewModel> GetAll()
         {
             return UserRepository
                 .GetAllUsers()
                 .Select(
-                    user => new GetAllUsersViewModel {
+                    user => new UsersViewModel {
                         Email = user.Email,
                         FirstName = user.FirstName,
                         LastName = user.LastName,
@@ -47,24 +55,15 @@ namespace app.Services
                 .AsEnumerable();
         }
 
-        // public Task<IEnumerable<User>> GetAllAsync()
-        // {
-        //     throw new NotImplementedException();
-        // }
+        public Guid Update(UsersViewModel item)
+        {
+            return UserRepository.Update(new User(item));
+        }
 
-        // public User GetById(Guid id)
-        // {
-        //     throw new NotImplementedException();
-        // }
+        public void Delete(UsersViewModel item)
+        {
+            UserRepository.Delete(new User(item));
+        }
 
-        // public Task<User> GetByIdAsync(Guid id)
-        // {
-        //     throw new NotImplementedException();
-        // }
-
-        // public Guid Update(User item)
-        // {
-        //     throw new NotImplementedException();
-        // }
     }
 }

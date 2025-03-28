@@ -7,7 +7,9 @@
   "paths": {
     "/Auth/IsValid": {
       "get": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "responses": {
           "200": {
             "description": "Success",
@@ -34,7 +36,9 @@
     },
     "/Auth/Logout": {
       "get": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "responses": {
           "200": {
             "description": "Success",
@@ -59,9 +63,145 @@
         }
       }
     },
+    "/Enum/Enum/GetAllCities": {
+      "get": {
+        "tags": [
+          "Enum"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/City"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/City"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/City"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Enum/Enum/GetAllCountries": {
+      "get": {
+        "tags": [
+          "Enum"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Country"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Country"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Country"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Enum/Enum/GetAllDistricts": {
+      "get": {
+        "tags": [
+          "Enum"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/District"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/District"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/District"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/Login": {
       "post": {
-        "tags": ["Login"],
+        "tags": [
+          "Login"
+        ],
         "operationId": "Login",
         "parameters": [
           {
@@ -88,7 +228,9 @@
     },
     "/Login/Login/GetAllUsers": {
       "get": {
-        "tags": ["Login"],
+        "tags": [
+          "Login"
+        ],
         "responses": {
           "200": {
             "description": "Success",
@@ -124,7 +266,9 @@
     },
     "/Login/Login/CreateUser": {
       "post": {
-        "tags": ["Login"],
+        "tags": [
+          "Login"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -170,7 +314,9 @@
     },
     "/WeatherForecast": {
       "get": {
-        "tags": ["WeatherForecast"],
+        "tags": [
+          "WeatherForecast"
+        ],
         "operationId": "GetWeatherForecast",
         "responses": {
           "200": {
@@ -208,10 +354,96 @@
   },
   "components": {
     "schemas": {
+      "City": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "Created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "Updated": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "UpdatedBy": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "CreatedBy": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "Name": {
+            "type": "string",
+            "nullable": true
+          },
+          "District": {
+            "$ref": "#/components/schemas/District"
+          },
+          "Code": {
+            "type": "string",
+            "nullable": true
+          },
+          "PostalCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "Population": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Country": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "Created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "Updated": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "UpdatedBy": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "CreatedBy": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "Regions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Region"
+            },
+            "nullable": true
+          },
+          "Name": {
+            "type": "string",
+            "nullable": true
+          },
+          "Code": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "CreateUserResponse": {
         "type": "object",
         "properties": {
-          "errorList": {
+          "ErrorList": {
             "type": "object",
             "additionalProperties": {
               "type": "array",
@@ -226,28 +458,77 @@
         "additionalProperties": false
       },
       "CreateUserViewModel": {
-        "required": ["email", "firstName", "lastName", "password"],
+        "required": [
+          "Email",
+          "FirstName",
+          "LastName",
+          "Password"
+        ],
         "type": "object",
         "properties": {
-          "id": {
+          "Id": {
             "type": "string",
             "format": "uuid"
           },
-          "firstName": {
+          "FirstName": {
             "minLength": 1,
             "type": "string"
           },
-          "lastName": {
+          "LastName": {
             "minLength": 1,
             "type": "string"
           },
-          "email": {
+          "Email": {
             "minLength": 1,
             "type": "string"
           },
-          "password": {
+          "Password": {
             "minLength": 1,
             "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "District": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "Created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "Updated": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "UpdatedBy": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "CreatedBy": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "Cities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/City"
+            },
+            "nullable": true
+          },
+          "Region": {
+            "$ref": "#/components/schemas/Region"
+          },
+          "Name": {
+            "type": "string",
+            "nullable": true
+          },
+          "Code": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -255,19 +536,63 @@
       "GetAllUsersViewModel": {
         "type": "object",
         "properties": {
-          "id": {
+          "Id": {
             "type": "string",
             "format": "uuid"
           },
-          "firstName": {
+          "FirstName": {
             "type": "string",
             "nullable": true
           },
-          "lastName": {
+          "LastName": {
             "type": "string",
             "nullable": true
           },
-          "email": {
+          "Email": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Region": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "Created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "Updated": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "UpdatedBy": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "CreatedBy": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "Districts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/District"
+            },
+            "nullable": true
+          },
+          "Country": {
+            "$ref": "#/components/schemas/Country"
+          },
+          "Name": {
+            "type": "string",
+            "nullable": true
+          },
+          "Code": {
             "type": "string",
             "nullable": true
           }
@@ -277,20 +602,20 @@
       "WeatherForecast": {
         "type": "object",
         "properties": {
-          "date": {
+          "Date": {
             "type": "string",
             "format": "date-time"
           },
-          "temperatureC": {
+          "TemperatureC": {
             "type": "integer",
             "format": "int32"
           },
-          "temperatureF": {
+          "TemperatureF": {
             "type": "integer",
             "format": "int32",
             "readOnly": true
           },
-          "summary": {
+          "Summary": {
             "type": "string",
             "nullable": true
           }

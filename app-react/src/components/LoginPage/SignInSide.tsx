@@ -15,6 +15,7 @@ import { LoginApi } from '../../api';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useAuth } from '../../contexts/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
+import { FormHelperText } from '@mui/material';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -26,6 +27,8 @@ interface SignInSideProps {
 export default function SignInSide({ loginApi }: SignInSideProps) {
   const navigate = useNavigate();
   const { setIsAuthenticated } = useAuth();
+
+  const [validationMessage,setValidationMessage] = React.useState("");
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -101,6 +104,7 @@ export default function SignInSide({ loginApi }: SignInSideProps) {
                 autoComplete="current-password"
                 value={'12000'}
               />
+              <FormHelperText style={{color: 'red'}}>{validationMessage}</FormHelperText>
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
@@ -146,9 +150,14 @@ export default function SignInSide({ loginApi }: SignInSideProps) {
     | null
     | undefined {
     return (response: AxiosResponse) => {
+      
       if (response?.status == 200) {
         setIsAuthenticated(true);
         navigate('/dashboard');
+      }
+
+      if (response?.status == 401) {
+        setValidationMessage("Problem with auth");
       }
     };
   }

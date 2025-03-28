@@ -1,7 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-export const PORT = 7152;
+export const PORT = 5000;
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -9,11 +9,15 @@ export default defineConfig({
   server: {
     proxy: {
       "/Login": {
-        target: `https://localhost:${PORT}`,
+        target: `http://0.0.0.0:${PORT}`,
         secure: false,
       }, // Your API server address
       "/Auth": {
-        target: `https://localhost:${PORT}`,
+        target: `http://0.0.0.0:${PORT}`,
+        secure: false,
+      }, // Your A
+      "/Enum": {
+        target: `http://0.0.0.0:${PORT}`,
         secure: false,
       }, // Your A
     },

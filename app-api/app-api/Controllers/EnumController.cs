@@ -15,23 +15,29 @@ namespace ing_app_api.Controllers
             ICityRepository cityRepository, 
             ICountryRepository countryRepo,
             IDistrictRepository districtRepository,
-            ApiDataContext ctx
+            ApiDataContext ctx,
+            IConfiguration config
         )
         {
             CityRepository = cityRepository;
             CountryRepo = countryRepo;
             DistrictRepository = districtRepository;
             Ctx = ctx;
+            Config = config;
         }
 
         public ICityRepository CityRepository { get; }
         public ICountryRepository CountryRepo { get; }
         public IDistrictRepository DistrictRepository { get; }
         public ApiDataContext Ctx { get; }
+        public IConfiguration Config { get; }
 
         [HttpGet]
         [Route("[controller]/GetAllCities")]
-        public IEnumerable<City> GetAllCities(int page = 0, int pageSize = 20)
+        public IEnumerable<City> GetAllCities(
+            int page = 0, 
+            int pageSize = 20
+        )
         {
             return CityRepository.GetAll(c => c.District).Skip(page * pageSize).Take(pageSize).ToList();
         }

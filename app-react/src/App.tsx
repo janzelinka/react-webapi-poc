@@ -10,8 +10,8 @@ import { DashboardLayout } from "./layouts/DashboardLayout";
 import { PrivateRoute } from "./routes/Routes";
 import { store } from "./stores/store";
 import { handleRedirectWhenNotAuthenticated } from "./helpers/helpers";
-import axios from "axios";
-import { LoginApi, AuthApi } from "./api";
+import axios, { AxiosError } from "axios";
+import { LoginApi, AuthApi, EnumApi } from "./api";
 
 /* API CLIENTS */
 
@@ -28,7 +28,15 @@ const loginApi = new LoginApi(
   apiClient
 );
 
-const authApi = new AuthApi(
+export const authApi = new AuthApi(
+  {
+    isJsonMime: () => true,
+  },
+  "http://localhost:5173",
+  apiClient
+);
+
+const enumApi = new EnumApi(
   {
     isJsonMime: () => true,
   },
@@ -41,13 +49,20 @@ const authApi = new AuthApi(
 // INTERCEPTORS
 apiClient.interceptors.response.use(
   (response: any) => response,
-  (error: any) => {
+  (error: AxiosError) => {
     handleRedirectWhenNotAuthenticated(error);
-    return error;
+    return error.response;
   }
 );
 
 export default class App extends React.Component {
+
+  componentDidMount(): void {
+    // enumApi.enumEnumGetAllCountriesGet().then((result) => {
+    //   console.log(result)
+    // })
+  }
+
   render() {
     return (
       <Provider store={store}>
@@ -74,7 +89,7 @@ export default class App extends React.Component {
                 </PrivateRoute>
               }
             />
-            <Route path="/register" element={<RegisterForm />} />
+            <Route path="/register" element={<RegisterForm loginApi={loginApi}/>} />
           </Routes>
         </AuthProvider>
       </Provider>

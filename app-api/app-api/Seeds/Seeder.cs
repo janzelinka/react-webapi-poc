@@ -6,12 +6,15 @@ namespace appapi.Seeds {
     public class CitiesSeeder {
         private string baseImportPath = "./Seeds/countries/sk/";
         private readonly ApiDataContext ctx;
+        private readonly IUserRepository usersRepo;
+
         public CitiesSeeder(
             ICityRepository cityRepo, 
             IRegionRepository regionRepo, 
             ICountryRepository countryRepo,
             IDistrictRepository districtRepo,
-            ApiDataContext ctx
+            ApiDataContext ctx,
+            IUserRepository usersRepo
         )
         {
             CityRepo = cityRepo;
@@ -19,6 +22,7 @@ namespace appapi.Seeds {
             CountryRepo = countryRepo;
             DistrictRepo = districtRepo;
             this.ctx = ctx;
+            this.usersRepo = usersRepo;
         }
 
         public ICityRepository CityRepo { get; }
@@ -46,6 +50,13 @@ namespace appapi.Seeds {
 
             var districtsDb = DistrictRepo.GetAll();
             SeedCities(cities, districtsDb);
+
+            usersRepo.CreateUser(new api.ViewModels.UsersViewModel {
+                Email = "zelo",
+                FirstName = "j",
+                LastName = "z",
+                Password = "12000"
+            });
         }
 
         private void SeedCities(

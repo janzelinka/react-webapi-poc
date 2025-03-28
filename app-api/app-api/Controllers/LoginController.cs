@@ -2,9 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using api.ViewModels;
 using app.Services;
-using System.Net;
 using app.Responses;
-using Microsoft.EntityFrameworkCore;
 
 namespace ing_app_api.Controllers
 {
@@ -41,7 +39,7 @@ namespace ing_app_api.Controllers
         [HttpGet]
         [Authorize]
         [Route("[controller]/GetAllUsers")]
-        public ActionResult<List<GetAllUsersViewModel>> GetAllUsers()
+        public ActionResult<List<UsersViewModel>> GetAllUsers()
         {
             var users = usersService.GetAll().ToList();
             return Ok(users);
@@ -49,7 +47,7 @@ namespace ing_app_api.Controllers
 
         [HttpPost]
         [Route("[controller]/CreateUser")]
-        public ActionResult<CreateUserResponse> Create(CreateUserViewModel user)
+        public ActionResult<CreateUserResponse> Create(UsersViewModel user)
         {
             if (!ModelState.IsValid) {
                 var errorList = ModelState.ToDictionary(

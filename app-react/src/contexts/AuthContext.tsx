@@ -1,4 +1,6 @@
-import { createContext, useContext, useState, useMemo } from 'react';
+import { createContext, useContext, useState, useMemo, useEffect } from 'react';
+import { authApi } from '../App';
+
 
 const AuthContext = createContext({
   setIsAuthenticated: (val: boolean) => { console.log(val); },
@@ -13,6 +15,11 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
     [isAuthenticated, setIsAuthenticated],
   );
 
+  useEffect(() => {
+    authApi
+    .authIsValidGet()
+    .then((res) => setIsAuthenticated(res.data))
+  }, [])
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 

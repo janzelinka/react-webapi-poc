@@ -13,12 +13,25 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useAppDispatch, useAppSelector } from "../stores/store";
 import { signUp as signUpAction } from "../features/login";
-export const RegisterForm = () => {
+import { LoginApi } from "../api";
+
+export const RegisterForm = ({ loginApi }: { loginApi: LoginApi }) => {
   const dispatch = useAppDispatch();
   const signUp = useAppSelector((state) => state.signUp);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    // event.
+    loginApi.loginLoginCreateUserPost({
+      Email: signUp.Email,
+      FirstName: signUp.FirstName,
+      LastName: signUp.LastName,
+      Password: signUp.Password
+    }).then((response) => {
+      if (response.status == 200) {
+        alert("success")
+      }
+    });
     console.log(signUp);
   };
 
