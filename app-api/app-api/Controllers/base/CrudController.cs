@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
 using app.Services;
+using app_api.Models.Interfaces;
 
 namespace ing_app_api.Controllers
 {
@@ -15,6 +16,7 @@ namespace ing_app_api.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [Route("[controller]/Create")]
         public virtual Guid Create(V item)
         {
@@ -22,6 +24,7 @@ namespace ing_app_api.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [Route("[controller]/GetAll")]        
         public virtual IEnumerable<V> GetAll()
         {
@@ -29,6 +32,7 @@ namespace ing_app_api.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         [Route("[controller]/Update")]
         public virtual Guid Update(V item)
         {
@@ -36,6 +40,7 @@ namespace ing_app_api.Controllers
         }
 
         [HttpDelete]
+        [Authorize]
         [Route("[controller]/Delete")]
         public virtual void Delete(V item)
         {

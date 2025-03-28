@@ -1,6 +1,7 @@
 using api.Repositories;
 using api.ViewModels;
 using app.Models;
+using app_api.Models.Interfaces;
 
 namespace app.Services
 {
@@ -10,12 +11,7 @@ namespace app.Services
         //will contain all additional method
     }
 
-    public interface ICrudService<T> {
-        public Guid Create(T item);
-        public IEnumerable<T> GetAll();
-        public Guid Update(T item);
-        public void Delete(T item);
-    }
+
 
     public class UsersService : IUsersService
     {
@@ -29,16 +25,6 @@ namespace app.Services
         {
             return UserRepository.CreateUser(item);
         }
-
-        // public Guid Delete(Guid id)
-        // {
-        //     throw new NotImplementedException();
-        // }
-
-        // public IEnumerable<User> Filter(User criteria)
-        // {
-        //     throw new NotImplementedException();
-        // }
 
         public IEnumerable<UsersViewModel> GetAll()
         {
