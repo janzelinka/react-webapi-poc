@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "ing_app_api": {
+    "app_api": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",

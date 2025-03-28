@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace ing_app_api.Migrations
+namespace app_api.Migrations
 {
     [DbContext(typeof(ApiDataContext))]
     partial class ApiDataContextModelSnapshot : ModelSnapshot

@@ -3,8 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
 using api.ViewModels;
 using app.Services;
+using api.Controllers;
 
-namespace ing_app_api.Controllers
+namespace app_api.Controllers
 {
     [ApiController]
     [Authorize]

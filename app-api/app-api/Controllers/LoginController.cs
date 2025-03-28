@@ -4,7 +4,7 @@ using api.ViewModels;
 using app.Services;
 using app.Responses;
 
-namespace ing_app_api.Controllers
+namespace app_api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -35,30 +35,5 @@ namespace ing_app_api.Controllers
 
             return Unauthorized();
         }
-
-        [HttpGet]
-        [Authorize]
-        [Route("[controller]/GetAllUsers")]
-        public ActionResult<List<UsersViewModel>> GetAllUsers()
-        {
-            var users = usersService.GetAll().ToList();
-            return Ok(users);
-        }
-
-        [HttpPost]
-        [Route("[controller]/CreateUser")]
-        public ActionResult<CreateUserResponse> Create(UsersViewModel user)
-        {
-            if (!ModelState.IsValid) {
-                var errorList = ModelState.ToDictionary(
-                    kvp => kvp.Key,
-                    kvp => kvp.Value?.Errors.Select(e => e.ErrorMessage).ToArray()
-                );
-                return Ok(new CreateUserResponse { ErrorList = errorList });
-            }
-            usersService.Create(user);
-            return Ok("Created");
-        }
-
     }
 }

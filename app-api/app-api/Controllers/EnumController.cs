@@ -5,7 +5,7 @@ using api.Repositories;
 using api.Models.Events;
 using Microsoft.EntityFrameworkCore;
 
-namespace ing_app_api.Controllers
+namespace app_api.Controllers
 {
     [ApiController]
     [Route("[controller]")]

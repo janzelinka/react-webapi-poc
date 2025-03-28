@@ -4,10 +4,15 @@ using Microsoft.AspNetCore.Authentication;
 using app.Services;
 using app_api.Models.Interfaces;
 
-namespace ing_app_api.Controllers
+namespace api.Controllers
 {
+    public class GenericResult<T> {
+        public Dictionary<string, string[]?> ? Errors { get; set;} = new Dictionary<string, string[]?>();
+        public T? Value { get;set; }
+    }
+
     [ApiController]
-    public abstract class CrudController<V, S> where S : ICrudService<V>
+    public abstract class CrudController<V, S> : BaseController where S : ICrudService<V>
     {
         public S ViewService { get; }
         public CrudController(S viewService)
@@ -18,9 +23,17 @@ namespace ing_app_api.Controllers
         [HttpPost]
         [Authorize]
         [Route("[controller]/Create")]
-        public virtual Guid Create(V item)
+        public virtual GenericResult<Guid> Create(V item)
         {
-            return ViewService.Create(item);
+            if (!ModelState.IsValid) {
+
+                return new GenericResult<Guid>() {
+                    Errors = Validate()
+                };
+            }
+            return new GenericResult<Guid>() {
+                Value = ViewService.Create(item)
+            };
         }
 
         [HttpGet]
@@ -34,9 +47,16 @@ namespace ing_app_api.Controllers
         [HttpPut]
         [Authorize]
         [Route("[controller]/Update")]
-        public virtual Guid Update(V item)
+        public virtual GenericResult<Guid> Update(V item)
         {
-            return ViewService.Update(item);
+            if (!ModelState.IsValid) {
+                return new GenericResult<Guid>() {
+                    Errors = Validate()
+                };
+            }
+            return new GenericResult<Guid>() {
+                Value = ViewService.Update(item)
+            };
         }
 
         [HttpDelete]

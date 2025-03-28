@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
 
-namespace ing_app_api.Controllers
+namespace app_api.Controllers
 {
     [ApiController]
     [Authorize]
