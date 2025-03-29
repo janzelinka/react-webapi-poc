@@ -11,7 +11,7 @@ import { PrivateRoute } from "./routes/Routes";
 import { store } from "./stores/store";
 import { handleRedirectWhenNotAuthenticated } from "./helpers/helpers";
 import axios, { AxiosError } from "axios";
-import { LoginApi, AuthApi, EnumApi } from "./api";
+import { LoginApi, AuthApi, UsersApi, /*EnumApi */} from "./api";
 
 /* API CLIENTS */
 
@@ -36,13 +36,20 @@ export const authApi = new AuthApi(
   apiClient
 );
 
-const enumApi = new EnumApi(
+export const usersApi = new UsersApi(
   {
     isJsonMime: () => true,
   },
   "http://localhost:5173",
   apiClient
 );
+// const enumApi = new EnumApi(
+//   {
+//     isJsonMime: () => true,
+//   },
+//   "http://localhost:5173",
+//   apiClient
+// );
 
 /* API CLIENTS END */
 
@@ -84,7 +91,7 @@ export default class App extends React.Component {
               element={
                 <PrivateRoute>
                   <DashboardLayout authApi={authApi}>
-                    <UsersOverview loginApi={loginApi} />
+                    <UsersOverview usersApi={usersApi} />
                   </DashboardLayout>
                 </PrivateRoute>
               }

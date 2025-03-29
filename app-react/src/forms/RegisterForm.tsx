@@ -13,16 +13,16 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useAppDispatch, useAppSelector } from "../stores/store";
 import { signUp as signUpAction } from "../features/login";
-import { LoginApi } from "../api";
+import { UsersApi } from "../api";
 
-export const RegisterForm = ({ loginApi }: { loginApi: LoginApi }) => {
+export const RegisterForm = ({ usersApi }: { usersApi: UsersApi }) => {
   const dispatch = useAppDispatch();
   const signUp = useAppSelector((state) => state.signUp);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // event.
-    loginApi.loginLoginCreateUserPost({
+    usersApi.usersCreatePost({
       Email: signUp.Email,
       FirstName: signUp.FirstName,
       LastName: signUp.LastName,
