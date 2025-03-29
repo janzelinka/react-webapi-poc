@@ -3,6 +3,8 @@ using api.Repositories;
 using app.Services;
 using appapi.Seeds;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Serilog;
+using Serilog.Sinks.Elasticsearch;
 
 public class Startup
 {
@@ -63,6 +65,18 @@ public class Startup
         });
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
+
+        Log.Logger = new LoggerConfiguration()
+            .WriteTo.Console()
+            .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri("http://elasticsearch:9200"))
+            {
+                AutoRegisterTemplate = true,
+                IndexFormat = "logs-myapp-{0:yyyy.MM.dd}",
+                NumberOfReplicas = 1,
+                NumberOfShards = 2
+            })
+            .Enrich.FromLogContext()
+            .CreateLogger();
 
     }
 

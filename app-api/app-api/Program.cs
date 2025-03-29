@@ -3,11 +3,12 @@ using api.Repositories;
 using app.Services;
 using appapi.Seeds;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Serilog;
 public class Program
 {
     public static void Main(string[] args)
     {
-        CreateHostBuilder(args).Build().Run();
+        CreateHostBuilder(args).UseSerilog().Build().Run();
     }
 
     public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -15,7 +16,7 @@ public class Program
             .ConfigureAppConfiguration((hostingContext, config) =>
             {
                 var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? throw new ArgumentException("Environment variable not specified = 'ASPNETCORE_ENVIRONMENT'");
-
+                
                 config.AddJsonFile($"appsettings.{environmentName}.json",
                     optional: true,
                     reloadOnChange: false);
