@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { GetAllUsersViewModel, LoginApi } from "../../api";
+import { UsersViewModel, UsersApi } from "../../api";
 import { CustomModal } from "../Modal/Modal";
 import {
   AddNewUserForm,
@@ -17,8 +17,8 @@ import {
 } from "../../forms/AddNewUserForm";
 import { useAppSelector } from "../../stores/store";
 
-export const UsersOverview = ({ loginApi }: { loginApi: LoginApi }) => {
-  const [users, setUsers] = useState<GetAllUsersViewModel[]>([]);
+export const UsersOverview = ({ usersApi }: { usersApi: UsersApi }) => {
+  const [users, setUsers] = useState<UsersViewModel[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [errorListForm, setErrorListForm] = useState<AddNewUserFormProps>({
     errorList: {},
@@ -26,25 +26,24 @@ export const UsersOverview = ({ loginApi }: { loginApi: LoginApi }) => {
   const register = useAppSelector((state) => state.register);
 
   useEffect(() => {
-    loginApi
-      .loginLoginGetAllUsersGet()
+    usersApi.usersGetAllGet()
       .then((result) => {
         setUsers(result.data);
       })
       .catch();
-  }, [loginApi]);
+  }, [usersApi]);
 
   const addNewUser = async () => {
-    const result = await loginApi.loginLoginCreateUserPost({
-      email: register.Email,
-      firstName: register.FirstName,
-      lastName: register.LastName,
-      password: register.Password,
+    const result = await usersApi.usersCreatePost({
+      Email: register.Email,
+      FirstName: register.FirstName,
+      LastName: register.LastName,
+      Password: register.Password,
     });
 
-    if (result.data?.errorList) {
+    if (result.data?.Errors) {
       setErrorListForm((prevState) => ({
-        errorList: { ...prevState.errorList, ...result.data?.errorList },
+        errorList: { ...prevState.errorList, ...result.data?.Errors },
       }));
 
       return false;
@@ -69,14 +68,14 @@ export const UsersOverview = ({ loginApi }: { loginApi: LoginApi }) => {
           <TableBody>
             {users.map((user) => (
               <TableRow
-                key={user.id}
+                key={user.Id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
-                  {user.email}
+                  {user.Email}
                 </TableCell>
-                <TableCell align="right">{user.firstName}</TableCell>
-                <TableCell align="right">{user.lastName}</TableCell>
+                <TableCell align="right">{user.FirstName}</TableCell>
+                <TableCell align="right">{user.LastName}</TableCell>
               </TableRow>
             ))}
           </TableBody>

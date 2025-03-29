@@ -226,10 +226,10 @@
         }
       }
     },
-    "/Login/Login/GetAllUsers": {
+    "/Users/GetAll": {
       "get": {
         "tags": [
-          "Login"
+          "Users"
         ],
         "responses": {
           "200": {
@@ -239,7 +239,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/GetAllUsersViewModel"
+                    "$ref": "#/components/schemas/UsersViewModel"
                   }
                 }
               },
@@ -247,7 +247,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/GetAllUsersViewModel"
+                    "$ref": "#/components/schemas/UsersViewModel"
                   }
                 }
               },
@@ -255,7 +255,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/GetAllUsersViewModel"
+                    "$ref": "#/components/schemas/UsersViewModel"
                   }
                 }
               }
@@ -264,26 +264,26 @@
         }
       }
     },
-    "/Login/Login/CreateUser": {
+    "/Users/Create": {
       "post": {
         "tags": [
-          "Login"
+          "Users"
         ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateUserViewModel"
+                "$ref": "#/components/schemas/UsersViewModel"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateUserViewModel"
+                "$ref": "#/components/schemas/UsersViewModel"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateUserViewModel"
+                "$ref": "#/components/schemas/UsersViewModel"
               }
             }
           }
@@ -294,17 +294,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/CreateUserResponse"
+                  "$ref": "#/components/schemas/GuidGenericResult"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CreateUserResponse"
+                  "$ref": "#/components/schemas/GuidGenericResult"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CreateUserResponse"
+                  "$ref": "#/components/schemas/GuidGenericResult"
                 }
               }
             }
@@ -312,41 +312,81 @@
         }
       }
     },
-    "/WeatherForecast": {
-      "get": {
+    "/Users/Update": {
+      "put": {
         "tags": [
-          "WeatherForecast"
+          "Users"
         ],
-        "operationId": "GetWeatherForecast",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UsersViewModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UsersViewModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UsersViewModel"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Success",
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/WeatherForecast"
-                  }
+                  "$ref": "#/components/schemas/GuidGenericResult"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/WeatherForecast"
-                  }
+                  "$ref": "#/components/schemas/GuidGenericResult"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/WeatherForecast"
-                  }
+                  "$ref": "#/components/schemas/GuidGenericResult"
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/Users/Delete": {
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UsersViewModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UsersViewModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UsersViewModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
           }
         }
       }
@@ -440,55 +480,6 @@
         },
         "additionalProperties": false
       },
-      "CreateUserResponse": {
-        "type": "object",
-        "properties": {
-          "ErrorList": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              },
-              "nullable": true
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "CreateUserViewModel": {
-        "required": [
-          "Email",
-          "FirstName",
-          "LastName",
-          "Password"
-        ],
-        "type": "object",
-        "properties": {
-          "Id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "FirstName": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "LastName": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "Email": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "Password": {
-            "minLength": 1,
-            "type": "string"
-          }
-        },
-        "additionalProperties": false
-      },
       "District": {
         "type": "object",
         "properties": {
@@ -533,24 +524,23 @@
         },
         "additionalProperties": false
       },
-      "GetAllUsersViewModel": {
+      "GuidGenericResult": {
         "type": "object",
         "properties": {
-          "Id": {
+          "Errors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "nullable": true
+            },
+            "nullable": true
+          },
+          "Value": {
             "type": "string",
             "format": "uuid"
-          },
-          "FirstName": {
-            "type": "string",
-            "nullable": true
-          },
-          "LastName": {
-            "type": "string",
-            "nullable": true
-          },
-          "Email": {
-            "type": "string",
-            "nullable": true
           }
         },
         "additionalProperties": false
@@ -599,25 +589,34 @@
         },
         "additionalProperties": false
       },
-      "WeatherForecast": {
+      "UsersViewModel": {
+        "required": [
+          "Email",
+          "FirstName",
+          "LastName",
+          "Password"
+        ],
         "type": "object",
         "properties": {
-          "Date": {
+          "Id": {
             "type": "string",
-            "format": "date-time"
+            "format": "uuid"
           },
-          "TemperatureC": {
-            "type": "integer",
-            "format": "int32"
+          "FirstName": {
+            "minLength": 1,
+            "type": "string"
           },
-          "TemperatureF": {
-            "type": "integer",
-            "format": "int32",
-            "readOnly": true
+          "LastName": {
+            "minLength": 1,
+            "type": "string"
           },
-          "Summary": {
-            "type": "string",
-            "nullable": true
+          "Email": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "Password": {
+            "minLength": 1,
+            "type": "string"
           }
         },
         "additionalProperties": false
