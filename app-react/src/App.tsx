@@ -96,7 +96,7 @@ export default class App extends React.Component {
                 </PrivateRoute>
               }
             />
-            <Route path="/register" element={<RegisterForm loginApi={loginApi}/>} />
+            <Route path="/register" element={<RegisterForm usersApi={usersApi}/>} />
           </Routes>
         </AuthProvider>
       </Provider>
