@@ -148,56 +148,6 @@ export interface Country {
 /**
  * 
  * @export
- * @interface CreateUserResponse
- */
-export interface CreateUserResponse {
-    /**
-     * 
-     * @type {{ [key: string]: Array<string>; }}
-     * @memberof CreateUserResponse
-     */
-    'ErrorList'?: { [key: string]: Array<string>; } | null;
-}
-/**
- * 
- * @export
- * @interface CreateUserViewModel
- */
-export interface CreateUserViewModel {
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateUserViewModel
-     */
-    'Id'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateUserViewModel
-     */
-    'FirstName': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateUserViewModel
-     */
-    'LastName': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateUserViewModel
-     */
-    'Email': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateUserViewModel
-     */
-    'Password': string;
-}
-/**
- * 
- * @export
  * @interface District
  */
 export interface District {
@@ -259,33 +209,21 @@ export interface District {
 /**
  * 
  * @export
- * @interface GetAllUsersViewModel
+ * @interface GuidGenericResult
  */
-export interface GetAllUsersViewModel {
+export interface GuidGenericResult {
+    /**
+     * 
+     * @type {{ [key: string]: Array<string>; }}
+     * @memberof GuidGenericResult
+     */
+    'Errors'?: { [key: string]: Array<string>; } | null;
     /**
      * 
      * @type {string}
-     * @memberof GetAllUsersViewModel
+     * @memberof GuidGenericResult
      */
-    'Id'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetAllUsersViewModel
-     */
-    'FirstName'?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetAllUsersViewModel
-     */
-    'LastName'?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetAllUsersViewModel
-     */
-    'Email'?: string | null;
+    'Value'?: string;
 }
 /**
  * 
@@ -351,33 +289,39 @@ export interface Region {
 /**
  * 
  * @export
- * @interface WeatherForecast
+ * @interface UsersViewModel
  */
-export interface WeatherForecast {
+export interface UsersViewModel {
     /**
      * 
      * @type {string}
-     * @memberof WeatherForecast
+     * @memberof UsersViewModel
      */
-    'Date'?: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof WeatherForecast
-     */
-    'TemperatureC'?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof WeatherForecast
-     */
-    'TemperatureF'?: number;
+    'Id'?: string;
     /**
      * 
      * @type {string}
-     * @memberof WeatherForecast
+     * @memberof UsersViewModel
      */
-    'Summary'?: string | null;
+    'FirstName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UsersViewModel
+     */
+    'LastName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UsersViewModel
+     */
+    'Email': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UsersViewModel
+     */
+    'Password': string;
 }
 
 /**
@@ -809,68 +753,6 @@ export const LoginApiAxiosParamCreator = function (configuration?: Configuration
                 options: localVarRequestOptions,
             };
         },
-        /**
-         * 
-         * @param {CreateUserViewModel} [createUserViewModel] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        loginLoginCreateUserPost: async (createUserViewModel?: CreateUserViewModel, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/Login/Login/CreateUser`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(createUserViewModel, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        loginLoginGetAllUsersGet: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/Login/Login/GetAllUsers`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
     }
 };
 
@@ -894,29 +776,6 @@ export const LoginApiFp = function(configuration?: Configuration) {
             const operationBasePath = operationServerMap['LoginApi.login']?.[index]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
-        /**
-         * 
-         * @param {CreateUserViewModel} [createUserViewModel] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async loginLoginCreateUserPost(createUserViewModel?: CreateUserViewModel, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateUserResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.loginLoginCreateUserPost(createUserViewModel, options);
-            const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['LoginApi.loginLoginCreateUserPost']?.[index]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async loginLoginGetAllUsersGet(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<GetAllUsersViewModel>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.loginLoginGetAllUsersGet(options);
-            const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['LoginApi.loginLoginGetAllUsersGet']?.[index]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
-        },
     }
 };
 
@@ -936,23 +795,6 @@ export const LoginApiFactory = function (configuration?: Configuration, basePath
          */
         login(username?: string, password?: string, options?: any): AxiosPromise<void> {
             return localVarFp.login(username, password, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {CreateUserViewModel} [createUserViewModel] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        loginLoginCreateUserPost(createUserViewModel?: CreateUserViewModel, options?: any): AxiosPromise<CreateUserResponse> {
-            return localVarFp.loginLoginCreateUserPost(createUserViewModel, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        loginLoginGetAllUsersGet(options?: any): AxiosPromise<Array<GetAllUsersViewModel>> {
-            return localVarFp.loginLoginGetAllUsersGet(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -975,44 +817,89 @@ export class LoginApi extends BaseAPI {
     public login(username?: string, password?: string, options?: AxiosRequestConfig) {
         return LoginApiFp(this.configuration).login(username, password, options).then((request) => request(this.axios, this.basePath));
     }
-
-    /**
-     * 
-     * @param {CreateUserViewModel} [createUserViewModel] 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof LoginApi
-     */
-    public loginLoginCreateUserPost(createUserViewModel?: CreateUserViewModel, options?: AxiosRequestConfig) {
-        return LoginApiFp(this.configuration).loginLoginCreateUserPost(createUserViewModel, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof LoginApi
-     */
-    public loginLoginGetAllUsersGet(options?: AxiosRequestConfig) {
-        return LoginApiFp(this.configuration).loginLoginGetAllUsersGet(options).then((request) => request(this.axios, this.basePath));
-    }
 }
 
 
 
 /**
- * WeatherForecastApi - axios parameter creator
+ * UsersApi - axios parameter creator
  * @export
  */
-export const WeatherForecastApiAxiosParamCreator = function (configuration?: Configuration) {
+export const UsersApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * 
+         * @param {UsersViewModel} [usersViewModel] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersCreatePost: async (usersViewModel?: UsersViewModel, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/Users/Create`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(usersViewModel, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {UsersViewModel} [usersViewModel] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersDeleteDelete: async (usersViewModel?: UsersViewModel, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/Users/Delete`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(usersViewModel, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getWeatherForecast: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/WeatherForecast`;
+        usersGetAllGet: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/Users/GetAll`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1035,63 +922,192 @@ export const WeatherForecastApiAxiosParamCreator = function (configuration?: Con
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {UsersViewModel} [usersViewModel] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersUpdatePut: async (usersViewModel?: UsersViewModel, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/Users/Update`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(usersViewModel, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
 /**
- * WeatherForecastApi - functional programming interface
+ * UsersApi - functional programming interface
  * @export
  */
-export const WeatherForecastApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = WeatherForecastApiAxiosParamCreator(configuration)
+export const UsersApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = UsersApiAxiosParamCreator(configuration)
     return {
+        /**
+         * 
+         * @param {UsersViewModel} [usersViewModel] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async usersCreatePost(usersViewModel?: UsersViewModel, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GuidGenericResult>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.usersCreatePost(usersViewModel, options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['UsersApi.usersCreatePost']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {UsersViewModel} [usersViewModel] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async usersDeleteDelete(usersViewModel?: UsersViewModel, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.usersDeleteDelete(usersViewModel, options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['UsersApi.usersDeleteDelete']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
         /**
          * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getWeatherForecast(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<WeatherForecast>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getWeatherForecast(options);
+        async usersGetAllGet(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<UsersViewModel>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.usersGetAllGet(options);
             const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['WeatherForecastApi.getWeatherForecast']?.[index]?.url;
+            const operationBasePath = operationServerMap['UsersApi.usersGetAllGet']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {UsersViewModel} [usersViewModel] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async usersUpdatePut(usersViewModel?: UsersViewModel, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GuidGenericResult>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.usersUpdatePut(usersViewModel, options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['UsersApi.usersUpdatePut']?.[index]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
     }
 };
 
 /**
- * WeatherForecastApi - factory interface
+ * UsersApi - factory interface
  * @export
  */
-export const WeatherForecastApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = WeatherForecastApiFp(configuration)
+export const UsersApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = UsersApiFp(configuration)
     return {
+        /**
+         * 
+         * @param {UsersViewModel} [usersViewModel] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersCreatePost(usersViewModel?: UsersViewModel, options?: any): AxiosPromise<GuidGenericResult> {
+            return localVarFp.usersCreatePost(usersViewModel, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {UsersViewModel} [usersViewModel] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersDeleteDelete(usersViewModel?: UsersViewModel, options?: any): AxiosPromise<void> {
+            return localVarFp.usersDeleteDelete(usersViewModel, options).then((request) => request(axios, basePath));
+        },
         /**
          * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getWeatherForecast(options?: any): AxiosPromise<Array<WeatherForecast>> {
-            return localVarFp.getWeatherForecast(options).then((request) => request(axios, basePath));
+        usersGetAllGet(options?: any): AxiosPromise<Array<UsersViewModel>> {
+            return localVarFp.usersGetAllGet(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {UsersViewModel} [usersViewModel] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersUpdatePut(usersViewModel?: UsersViewModel, options?: any): AxiosPromise<GuidGenericResult> {
+            return localVarFp.usersUpdatePut(usersViewModel, options).then((request) => request(axios, basePath));
         },
     };
 };
 
 /**
- * WeatherForecastApi - object-oriented interface
+ * UsersApi - object-oriented interface
  * @export
- * @class WeatherForecastApi
+ * @class UsersApi
  * @extends {BaseAPI}
  */
-export class WeatherForecastApi extends BaseAPI {
+export class UsersApi extends BaseAPI {
+    /**
+     * 
+     * @param {UsersViewModel} [usersViewModel] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UsersApi
+     */
+    public usersCreatePost(usersViewModel?: UsersViewModel, options?: AxiosRequestConfig) {
+        return UsersApiFp(this.configuration).usersCreatePost(usersViewModel, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {UsersViewModel} [usersViewModel] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UsersApi
+     */
+    public usersDeleteDelete(usersViewModel?: UsersViewModel, options?: AxiosRequestConfig) {
+        return UsersApiFp(this.configuration).usersDeleteDelete(usersViewModel, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof WeatherForecastApi
+     * @memberof UsersApi
      */
-    public getWeatherForecast(options?: AxiosRequestConfig) {
-        return WeatherForecastApiFp(this.configuration).getWeatherForecast(options).then((request) => request(this.axios, this.basePath));
+    public usersGetAllGet(options?: AxiosRequestConfig) {
+        return UsersApiFp(this.configuration).usersGetAllGet(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {UsersViewModel} [usersViewModel] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UsersApi
+     */
+    public usersUpdatePut(usersViewModel?: UsersViewModel, options?: AxiosRequestConfig) {
+        return UsersApiFp(this.configuration).usersUpdatePut(usersViewModel, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
