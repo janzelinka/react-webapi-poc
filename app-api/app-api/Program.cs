@@ -4,11 +4,18 @@ using app.Services;
 using appapi.Seeds;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Serilog;
+using Serilog.Sinks.Elasticsearch;
 public class Program
 {
     public static void Main(string[] args)
     {
-        CreateHostBuilder(args).UseSerilog().Build().Run();
+        var isDocker = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Docker";
+        var logger = new LoggerConfiguration()
+            .WriteTo.Console()
+            .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(isDocker ? "http://elasticsearch:9200" : "http://localhost:9200")))
+            .CreateLogger();
+
+        CreateHostBuilder(args).UseSerilog(logger).Build().Run();
     }
 
     public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -16,7 +23,6 @@ public class Program
             .ConfigureAppConfiguration((hostingContext, config) =>
             {
                 var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? throw new ArgumentException("Environment variable not specified = 'ASPNETCORE_ENVIRONMENT'");
-                
                 config.AddJsonFile($"appsettings.{environmentName}.json",
                     optional: true,
                     reloadOnChange: false);

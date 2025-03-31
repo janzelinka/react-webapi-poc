@@ -45,9 +45,8 @@ public class Startup
         services.AddDbContext<ApiDataContext>();
         services.AddTransient<IUserRepository, UserRepository>();
         services.AddTransient<ICountryRepository, CountryRepository>();
-        services.AddTransient<IRegionRepository, RegionRepository>();
         services.AddTransient<ICityRepository, CityRepository>();
-        services.AddTransient<IDistrictRepository, DistrictRepository>();
+        services.AddTransient<IStateRepository, StateRepository>();
         services.AddTransient<CitiesSeeder>();
         services.AddTransient<IAuthService, AuthService>();
         services.AddTransient<IUsersService, UsersService>();
@@ -66,25 +65,13 @@ public class Startup
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
 
-        Log.Logger = new LoggerConfiguration()
-            .WriteTo.Console()
-            .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri("http://elasticsearch:9200"))
-            {
-                AutoRegisterTemplate = true,
-                IndexFormat = "logs-myapp-{0:yyyy.MM.dd}",
-                NumberOfReplicas = 1,
-                NumberOfShards = 2
-            })
-            .Enrich.FromLogContext()
-            .CreateLogger();
-
     }
 
     // This method is used to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
         var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? throw new ArgumentException("Environment variable not specified = 'ASPNETCORE_ENVIRONMENT'");
-       if (environmentName.Equals("Development"))
+       if (environmentName.Equals("Development") || environmentName.Equals("Docker"))
         {
             app.UseSwagger();
             app.UseSwaggerUI();
@@ -102,8 +89,10 @@ public class Startup
         });
         
         using (var scope = app.ApplicationServices.CreateScope()) {
+            // var logger = scope.ServiceProvider.GetRequiredService<Microsoft.Extensions.Logging.ILogger>();
+            // logger.LogError("test error");
             var seder = scope.ServiceProvider.GetRequiredService<CitiesSeeder>();
-            seder.Seed();
+            seder.Seed_v2();
         }
     }
 }

@@ -4,52 +4,64 @@ using Newtonsoft.Json;
 
 namespace appapi.Seeds {
     public class CitiesSeeder {
-        private string baseImportPath = "./Seeds/countries/sk/";
+        private string baseImportPath = "./Seeds/countries/sk2/";
         private readonly ApiDataContext ctx;
         private readonly IUserRepository usersRepo;
 
         public CitiesSeeder(
             ICityRepository cityRepo, 
-            IRegionRepository regionRepo, 
             ICountryRepository countryRepo,
-            IDistrictRepository districtRepo,
+            IStateRepository stateRepo,
             ApiDataContext ctx,
             IUserRepository usersRepo
         )
         {
             CityRepo = cityRepo;
-            RegionRepo = regionRepo;
             CountryRepo = countryRepo;
-            DistrictRepo = districtRepo;
+            StateRepo = stateRepo;
             this.ctx = ctx;
             this.usersRepo = usersRepo;
         }
 
         public ICityRepository CityRepo { get; }
-        public IRegionRepository RegionRepo { get; }
         public ICountryRepository CountryRepo { get; }
-        public IDistrictRepository DistrictRepo { get; }
+        public IStateRepository StateRepo { get; }
 
-        public void Seed()
+        public void Seed_v2()
         {
             CityRepo.DeleteRange(CityRepo.GetAll());
-            DistrictRepo.DeleteRange(DistrictRepo.GetAll());
-            RegionRepo.DeleteRange(RegionRepo.GetAll());
+            StateRepo.DeleteRange(StateRepo.GetAll());
+            StateRepo.DeleteRange(StateRepo.GetAll());
             CountryRepo.DeleteRange(CountryRepo.GetAll());
 
             var countries = Import<CountryImport>($"{baseImportPath}countries.json");
-            var regions = Import<RegionImport>($"{baseImportPath}regions.json");
-            var districts = Import<DistrictImport>($"{baseImportPath}districts.json");
-            var cities = Import<CityImport>(@$"{baseImportPath}villages.json");
+            var states = Import<StateImport>($"{baseImportPath}states.json");
+            var cities = Import<CityImport>(@$"{baseImportPath}cities.json");
 
-            SeedCountries(countries);
-            SeedRegions(regions);
+            //filter for only cz and sk.
+            foreach(var country in countries.Where(c => c.ImportCountryId == "200" || c.ImportCountryId == "58")) {
+                var countryToImport = new Country() {
+                    Name = country.Name,
+                };
+                
+                var statesToImport = new List<State>();
+                foreach(var state in states.Where(s => s.CountryId.Equals(country.ImportCountryId))) {
+       
+                    var citiesToImport = new List<City>();
+                    foreach(var city in cities.Where(c => c.StateId.Equals(state.StateImportId))) {
+                        citiesToImport.Add(new City {
+                            Name = city.Name
+                        });
+                    } 
+                    statesToImport.Add(new State {
+                        Name = state.Name,
+                        Cities = citiesToImport,
+                    });
 
-            var regionsDb = RegionRepo.GetAll();
-            SeedDistricts(districts, regionsDb);
-
-            var districtsDb = DistrictRepo.GetAll();
-            SeedCities(cities, districtsDb);
+                }
+                countryToImport.States = statesToImport;
+                CountryRepo.Add(countryToImport);
+            }
 
             usersRepo.CreateUser(new api.ViewModels.UsersViewModel {
                 Email = "zelo",
@@ -58,74 +70,6 @@ namespace appapi.Seeds {
                 Password = "12000"
             });
         }
-
-        private void SeedCities(
-            CityImport[] cities, 
-            IEnumerable<District> districts
-        )
-        {
-            List<City> citiesToAdd = new List<City>();
-            cities.ToList().ForEach((city) =>
-            {
-                var assignedDistrict = districts.Where(district => district.Code.Equals(city.DistrictId)).First();
-
-                citiesToAdd.Add(new City
-                {
-                    District = assignedDistrict,
-                    Name = city.Name,
-                    PostalCode = city.PostalCode
-                });
-            });
-
-            CityRepo.AddRange(citiesToAdd);
-        }
-
-        private void SeedDistricts(
-            DistrictImport[] districts,
-            IEnumerable<Region> regionsDb
-        )
-        {
-            List<District> districtsToAdd = new List<District>();
-            districts.ToList().ForEach(district =>
-            {
-                var assignedRegion = regionsDb.Where(region => district.RegionId.Equals(region.Code)).First();
-
-                districtsToAdd.Add(new District
-                {
-                    Name = district.Name,
-                    Region = assignedRegion,
-                    Code = district.DistrictId
-                });
-            });
-
-            DistrictRepo.AddRange(districtsToAdd);
-        }
-
-        private void SeedRegions(RegionImport[] regions)
-        {
-            regions.ToList().ForEach((region) =>
-            {
-                //we have only one country in dataset
-                var assignedCountry = CountryRepo.GetAll().First();
-
-                RegionRepo.Add(new Region
-                {
-                    Code = region.RegionId,
-                    Name = region.Name,
-                    Country = assignedCountry
-                });
-            });
-        }
-
-        private void SeedCountries(CountryImport[] countries)
-        {
-            CountryRepo.Add(new Country
-            {
-                Code = "SK",
-                Name = countries[0].Name
-            });
-        }
-
         private T[] Import<T>(string jsonPath) {
             var jsonFile = File.ReadAllText(jsonPath);
             var parsedFile = JsonConvert.DeserializeObject<T[]>(jsonFile) ?? throw new ArgumentException("provided file is wrong!");

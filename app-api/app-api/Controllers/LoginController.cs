@@ -1,8 +1,5 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using api.ViewModels;
 using app.Services;
-using app.Responses;
 
 namespace app_api.Controllers
 {
@@ -14,18 +11,21 @@ namespace app_api.Controllers
 
         public IAuthService AuthService { get; }
         public ApiDataContext Ctx { get; }
+        public ILogger<LoginController> Logger { get; }
 
-        public LoginController(IUsersService usersService, IAuthService authService, ApiDataContext ctx)
+        public LoginController(IUsersService usersService, IAuthService authService, ApiDataContext ctx, ILogger<LoginController> logger)
         {
             this.usersService = usersService;
             AuthService = authService;
             Ctx = ctx;
+            Logger = logger;
         }
 
         [HttpPost(Name = "Login")]
         public async Task<ActionResult> Login(string username, string password)
         {
-            // var categories = Ctx.Categories.Include(c => c.Products).ToList();
+            Logger.LogError("This is my error.");
+
             var result = await AuthService.LoginAsync(username, password);
 
             if (result)

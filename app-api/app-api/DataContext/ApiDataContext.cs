@@ -10,7 +10,7 @@ public class ApiDataContext : DbContext
     public DbSet<Address>? Addresses { get; set; }
     public DbSet<Event>? Events { get; set; }
     public DbSet<Order>? Orders { get; set; }
-    public DbSet<Region>? Regions { get; set; }
+    public DbSet<State>? States { get; set; }
     public DbSet<Country>? Countries { get; set; }
     public DbSet<Category>? Categories { get; set; }
     public DbSet<Product>? Products { get; set; }

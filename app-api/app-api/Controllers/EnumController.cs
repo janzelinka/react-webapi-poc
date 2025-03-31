@@ -14,21 +14,21 @@ namespace app_api.Controllers
         public EnumController(
             ICityRepository cityRepository, 
             ICountryRepository countryRepo,
-            IDistrictRepository districtRepository,
+            IStateRepository StateRepository,
             ApiDataContext ctx,
             IConfiguration config
         )
         {
             CityRepository = cityRepository;
             CountryRepo = countryRepo;
-            DistrictRepository = districtRepository;
+            StateRepository = StateRepository;
             Ctx = ctx;
             Config = config;
         }
 
         public ICityRepository CityRepository { get; }
         public ICountryRepository CountryRepo { get; }
-        public IDistrictRepository DistrictRepository { get; }
+        public IStateRepository StateRepository { get; }
         public ApiDataContext Ctx { get; }
         public IConfiguration Config { get; }
 
@@ -39,7 +39,7 @@ namespace app_api.Controllers
             int pageSize = 20
         )
         {
-            return CityRepository.GetAll(c => c.District).Skip(page * pageSize).Take(pageSize).ToList();
+            return CityRepository.GetAll().Skip(page * pageSize).Take(pageSize).ToList();
         }
 
         [HttpGet]
@@ -47,17 +47,17 @@ namespace app_api.Controllers
         public IEnumerable<Country> GetAllCountries()
         {
             return Ctx.Countries
-            .Include(country => country.Regions)
-            .ThenInclude(region => region.Districts)
-            .ThenInclude(district => district.Cities);
+            .Include(country => country.States)
+            // .ThenInclude(region => region.States)
+            .ThenInclude(State => State.Cities);
         }
 
-        [HttpGet]
-        [Route("[controller]/GetAllDistricts")]
-        public IEnumerable<District> GetAllDistricts()
-        {
-            return DistrictRepository.GetAll(c => c.Cities);
-        }
+        // [HttpGet]
+        // [Route("[controller]/GetAllStates")]
+        // public IEnumerable<State> GetAllStates()
+        // {
+        //     return StateRepository.GetAll(c => c.Cities);
+        // }
 
 
     }

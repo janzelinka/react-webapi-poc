@@ -1,0 +1,25 @@
+2025-03-29 07:22:46.707 -04:00 [INF] Hello, world!
+2025-03-29 07:22:46.748 -04:00 [DBG] Dividing 10 by 0
+2025-03-29 07:22:46.823 -04:00 [ERR] Something went wrong
+System.DivideByZeroException: Attempted to divide by zero.
+   at app_api.Controllers.LoginController.Login(String username, String password) in /home/zelo/Desktop/react-webapi-poc/app-api/app-api/Controllers/LoginController.cs:line 44
+2025-03-29 07:32:18.341 -04:00 [INF] Hello, world!
+2025-03-29 07:32:18.350 -04:00 [DBG] Dividing 10 by 0
+2025-03-29 07:32:18.408 -04:00 [ERR] Something went wrong
+System.DivideByZeroException: Attempted to divide by zero.
+   at app_api.Controllers.LoginController.Login(String username, String password) in /home/zelo/Desktop/react-webapi-poc/app-api/app-api/Controllers/LoginController.cs:line 44
+2025-03-29 07:32:25.426 -04:00 [INF] Hello, world!
+2025-03-29 07:32:25.436 -04:00 [DBG] Dividing 10 by 0
+2025-03-29 07:32:25.465 -04:00 [ERR] Something went wrong
+System.DivideByZeroException: Attempted to divide by zero.
+   at app_api.Controllers.LoginController.Login(String username, String password) in /home/zelo/Desktop/react-webapi-poc/app-api/app-api/Controllers/LoginController.cs:line 44
+2025-03-29 07:32:26.314 -04:00 [INF] Hello, world!
+2025-03-29 07:32:26.334 -04:00 [DBG] Dividing 10 by 0
+2025-03-29 07:32:26.404 -04:00 [ERR] Something went wrong
+System.DivideByZeroException: Attempted to divide by zero.
+   at app_api.Controllers.LoginController.Login(String username, String password) in /home/zelo/Desktop/react-webapi-poc/app-api/app-api/Controllers/LoginController.cs:line 44
+2025-03-29 07:32:28.234 -04:00 [INF] Hello, world!
+2025-03-29 07:32:28.243 -04:00 [DBG] Dividing 10 by 0
+2025-03-29 07:32:28.273 -04:00 [ERR] Something went wrong
+System.DivideByZeroException: Attempted to divide by zero.
+   at app_api.Controllers.LoginController.Login(String username, String password) in /home/zelo/Desktop/react-webapi-poc/app-api/app-api/Controllers/LoginController.cs:line 44
