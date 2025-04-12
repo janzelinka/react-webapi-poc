@@ -24,7 +24,6 @@ namespace api.Models.Events {
 
     public class City : BaseEntity {
         public string Name {get;set;} = string.Empty;
-        public State? State {get;set;}
         public string Code {get;set;} = string.Empty;
         public string PostalCode {get;set;} = string.Empty;
         public int Population {get;set;}
@@ -32,7 +31,6 @@ namespace api.Models.Events {
 
     public class State : BaseEntity {
         public List<City> Cities {get;set;} = new List<City>();
-        public Country? Country { get;set; }
         public string Name {get;set;} = string.Empty;
         public string Code {get;set;} = string.Empty;
     }

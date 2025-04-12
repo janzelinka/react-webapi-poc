@@ -6,7 +6,7 @@ public class CityImport {
         public string Name {get;set;} = string.Empty;
 
         [JsonProperty("state_id")]
-        public string StateId {get;set;} = string.Empty;
+        public string StateImportId {get;set;} = string.Empty;
 
         [JsonProperty("zip")]
         public string PostalCode {get;set;} = string.Empty;

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication;
 using api.Repositories;
 using api.Models.Events;
 using Microsoft.EntityFrameworkCore;
+using Nest;
 
 namespace app_api.Controllers
 {
@@ -46,6 +47,19 @@ namespace app_api.Controllers
         [Route("[controller]/GetAllCountries")]
         public IEnumerable<Country> GetAllCountries()
         {
+            var settings = new ConnectionSettings(new Uri("http://localhost:9200")).DefaultIndex("countries");
+            var client = new ElasticClient(settings);
+
+            var searchResponse = client.Search<Country>(s => s
+                .Query(q => q
+                    .Match(m => m
+                        .Field("states.cities.name")  // Search in all cities
+                        .Query("Banská Bystrica")
+                    )
+                )
+            );
+
+
             return Ctx.Countries
             .Include(country => country.States)
             // .ThenInclude(region => region.States)
