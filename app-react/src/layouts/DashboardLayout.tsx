@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { JSX } from 'react';
 import { MainMenu } from '../components/MainMenu';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import { AuthApi } from '../api';

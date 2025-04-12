@@ -1,6 +1,6 @@
 import { PureComponent } from 'react';
 
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/GridLegacy';
 import Paper from '@mui/material/Paper';
 
 import Chart from './Chart';
