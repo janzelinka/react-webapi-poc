@@ -1,6 +1,6 @@
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import Grid from "@mui/material/GridLegacy";
+import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import { useAppDispatch, useAppSelector } from "../stores/store";
@@ -31,8 +31,8 @@ export const AddNewUserForm = ({ errorList }: AddNewUserFormProps) => {
         }}
       >
         <Box component="form" noValidate sx={{ mt: 3 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+          <Grid  spacing={2}>
+            <Grid size={{xs:12, sm:6}}>
               <TextField
                 autoComplete="given-name"
                 name="FirstName"
@@ -50,7 +50,7 @@ export const AddNewUserForm = ({ errorList }: AddNewUserFormProps) => {
               />
               <ValidationMessage text={errorList.FirstName?.[0]} />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid  size={{xs:12, sm:6}}>
               <TextField
                 required
                 fullWidth
@@ -67,7 +67,7 @@ export const AddNewUserForm = ({ errorList }: AddNewUserFormProps) => {
               />
               <ValidationMessage text={errorList.LastName?.[0]} />
             </Grid>
-            <Grid item xs={12}>
+            <Grid  size={{xs:12 }}>
               <TextField
                 required
                 fullWidth
@@ -84,7 +84,7 @@ export const AddNewUserForm = ({ errorList }: AddNewUserFormProps) => {
               />
               <ValidationMessage text={errorList.Email?.[0]} />
             </Grid>
-            <Grid item xs={12}>
+            <Grid  size={{xs:12}}>
               <TextField
                 required
                 fullWidth

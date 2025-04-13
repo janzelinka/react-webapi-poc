@@ -6,7 +6,7 @@ import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
-import Grid from "@mui/material/GridLegacy";
+import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
@@ -54,7 +54,7 @@ export const RegisterForm = ({ usersApi }: { usersApi: UsersApi }) => {
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid  size={{xs:12, sm:6}}>
               <TextField
                 autoComplete="given-name"
                 name="firstName"
@@ -71,7 +71,7 @@ export const RegisterForm = ({ usersApi }: { usersApi: UsersApi }) => {
                 }
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{xs:12, sm:6}}>
               <TextField
                 required
                 fullWidth
@@ -87,7 +87,7 @@ export const RegisterForm = ({ usersApi }: { usersApi: UsersApi }) => {
                 }
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid  size={{xs:12, sm:6}}>
               <TextField
                 required
                 fullWidth
@@ -103,7 +103,7 @@ export const RegisterForm = ({ usersApi }: { usersApi: UsersApi }) => {
                 }
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid  size={{xs:12, sm:6}}>
               <TextField
                 required
                 fullWidth
@@ -120,7 +120,7 @@ export const RegisterForm = ({ usersApi }: { usersApi: UsersApi }) => {
                 }
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid  size={{xs:12, sm:6}}>
               <FormControlLabel
                 control={<Checkbox value="allowExtraEmails" color="primary" />}
                 label="I want to receive inspiration, marketing promotions and updates via email."
@@ -136,7 +136,7 @@ export const RegisterForm = ({ usersApi }: { usersApi: UsersApi }) => {
             Sign Up
           </Button>
           <Grid container justifyContent="flex-end">
-            <Grid item>
+            <Grid>
               <Link href="#" variant="body2">
                 Already have an account? Sign in
               </Link>
