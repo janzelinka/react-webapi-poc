@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using api.Repositories;
 using app.Services;
+using appapi.Factories;
 using appapi.Seeds;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Serilog;
@@ -17,8 +18,8 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        
-          // Add MVC support if you're using controllers and views
+
+        // Add MVC support if you're using controllers and views
         services
         .AddHttpContextAccessor()
         .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -43,6 +44,8 @@ public class Startup
         });
         // Add services to the container.
         services.AddDbContext<ApiDataContext>();
+        services.AddTransient<IElasticFactory, ElasticFactory>();
+
         services.AddTransient<IUserRepository, UserRepository>();
         services.AddTransient<ICountryRepository, CountryRepository>();
         services.AddTransient<ICityRepository, CityRepository>();
@@ -71,15 +74,15 @@ public class Startup
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
         var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? throw new ArgumentException("Environment variable not specified = 'ASPNETCORE_ENVIRONMENT'");
-       if (environmentName.Equals("Development") || environmentName.Equals("Docker"))
+        if (environmentName.Equals("Development") || environmentName.Equals("Docker"))
         {
             app.UseSwagger();
             app.UseSwaggerUI();
-    
+
         }
         app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:5000"));
         app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:8081"));
-        
+
         app.UseAuthentication();
         app.UseRouting();
         app.UseAuthorization();
@@ -87,10 +90,9 @@ public class Startup
         {
             endpoints.MapControllers();
         });
-        
-        using (var scope = app.ApplicationServices.CreateScope()) {
-            // var logger = scope.ServiceProvider.GetRequiredService<Microsoft.Extensions.Logging.ILogger>();
-            // logger.LogError("test error");
+
+        using (var scope = app.ApplicationServices.CreateScope())
+        {
             var seder = scope.ServiceProvider.GetRequiredService<CitiesSeeder>();
             seder.Seed_v2();
         }

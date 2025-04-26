@@ -1,8 +1,9 @@
+using api.Models.Events;
+using api.Repositories;
+using appapi.Factories;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authentication;
-using api.Repositories;
-using api.Models.Events;
 using Microsoft.EntityFrameworkCore;
 using Nest;
 
@@ -13,11 +14,12 @@ namespace app_api.Controllers
     public class EnumController : ControllerBase
     {
         public EnumController(
-            ICityRepository cityRepository, 
+            ICityRepository cityRepository,
             ICountryRepository countryRepo,
             IStateRepository StateRepository,
             ApiDataContext ctx,
-            IConfiguration config
+            IConfiguration config,
+            IElasticFactory elasticFactory
         )
         {
             CityRepository = cityRepository;
@@ -25,6 +27,7 @@ namespace app_api.Controllers
             StateRepository = StateRepository;
             Ctx = ctx;
             Config = config;
+            ElasticFactory = elasticFactory;
         }
 
         public ICityRepository CityRepository { get; }
@@ -32,11 +35,12 @@ namespace app_api.Controllers
         public IStateRepository StateRepository { get; }
         public ApiDataContext Ctx { get; }
         public IConfiguration Config { get; }
+        public IElasticFactory ElasticFactory { get; }
 
         [HttpGet]
         [Route("[controller]/GetAllCities")]
         public IEnumerable<City> GetAllCities(
-            int page = 0, 
+            int page = 0,
             int pageSize = 20
         )
         {
@@ -45,27 +49,19 @@ namespace app_api.Controllers
 
         [HttpGet]
         [Route("[controller]/GetAllCountries")]
-        public IEnumerable<Country> GetAllCountries()
+        public IEnumerable<Country> GetAllCountries([FromQuery] string countryName)
         {
-            var settings = new ConnectionSettings(new Uri("http://localhost:9200")).DefaultIndex("countries");
-            var client = new ElasticClient(settings);
-
-            var searchResponse = client.Search<Country>(s => s
+            var all = ElasticFactory.CreateElasticClient("countries").Search<Country>(s => s
                 .Query(q => q
-                    .Match(m => m
-                        .Field("states.cities.name")  // Search in all cities
-                        .Query("Banská Bystrica")
+                    .QueryString(qs => qs
+                        .Fields(f => f.Field(ff => ff.Name))
+                        .Query(string.IsNullOrEmpty(countryName) ? "*" : $"*{countryName}*")
                     )
                 )
             );
 
-
-            return Ctx.Countries
-            .Include(country => country.States)
-            // .ThenInclude(region => region.States)
-            .ThenInclude(State => State.Cities);
+            return all.Documents.ToList();
         }
-
         // [HttpGet]
         // [Route("[controller]/GetAllStates")]
         // public IEnumerable<State> GetAllStates()
