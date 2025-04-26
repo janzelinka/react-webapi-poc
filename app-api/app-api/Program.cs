@@ -1,32 +1,32 @@
-using System.Text.Json.Serialization;
-using api.Repositories;
-using app.Services;
-using appapi.Seeds;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Serilog;
 using Serilog.Sinks.Elasticsearch;
 public class Program
 {
     public static void Main(string[] args)
     {
-        var isDocker = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Docker";
+        var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? throw new ArgumentException("Environment variable not specified = 'ASPNETCORE_ENVIRONMENT'");
+
+        var configuration = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json")
+            .AddJsonFile($"appsettings.{environmentName}.json")
+            .Build();
+
+        var elasticUrl = configuration.GetSection("Configuration").GetValue<string>("ElasticSearchUri") ?? throw new ArgumentException($"ElasticSearchUri is missing in configuration for environment {environmentName}");
+
         var logger = new LoggerConfiguration()
             .WriteTo.Console()
-            .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(isDocker ? "http://elasticsearch:9200" : "http://localhost:9200")))
+            .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(elasticUrl)))
             .CreateLogger();
 
-        CreateHostBuilder(args).UseSerilog(logger).Build().Run();
+        CreateHostBuilder(args, environmentName)
+        .UseSerilog(logger)
+        .Build()
+        .Run();
     }
 
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
+    public static IHostBuilder CreateHostBuilder(string[] args, string environmentName) =>
         Host.CreateDefaultBuilder(args)
-            .ConfigureAppConfiguration((hostingContext, config) =>
-            {
-                var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? throw new ArgumentException("Environment variable not specified = 'ASPNETCORE_ENVIRONMENT'");
-                config.AddJsonFile($"appsettings.{environmentName}.json",
-                    optional: true,
-                    reloadOnChange: false);
-            })
             .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder
