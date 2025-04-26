@@ -34,6 +34,10 @@ namespace app_api.Migrations
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid?>("StateId")
                         .HasColumnType("TEXT");
 
@@ -215,6 +219,10 @@ namespace app_api.Migrations
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("Updated")
                         .HasColumnType("TEXT");
 
@@ -327,6 +335,10 @@ namespace app_api.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<byte[]>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("BLOB");
@@ -376,11 +388,9 @@ namespace app_api.Migrations
 
             modelBuilder.Entity("api.Models.Events.City", b =>
                 {
-                    b.HasOne("api.Models.Events.State", "State")
+                    b.HasOne("api.Models.Events.State", null)
                         .WithMany("Cities")
                         .HasForeignKey("StateId");
-
-                    b.Navigation("State");
                 });
 
             modelBuilder.Entity("api.Models.Events.Event", b =>
@@ -428,11 +438,9 @@ namespace app_api.Migrations
 
             modelBuilder.Entity("api.Models.Events.State", b =>
                 {
-                    b.HasOne("api.Models.Events.Country", "Country")
+                    b.HasOne("api.Models.Events.Country", null)
                         .WithMany("States")
                         .HasForeignKey("CountryId");
-
-                    b.Navigation("Country");
                 });
 
             modelBuilder.Entity("api.Models.Events.Category", b =>

@@ -1,11 +1,11 @@
 {
   "version": "0.2.0",
   "configurations": [
-    {
-      "name": "C#: <project-name> Debug",
-      "type": "dotnet",
-      "request": "launch",
-      "projectPath": "${workspaceFolder}/app-api/app-api/app-api.csproj"
-    },
+{
+  "name": "C#: app-api Debug",
+  "type": "dotnet",
+  "request": "launch",
+  "projectPath": "${workspaceFolder}/app-api/app-api/app-api.csproj"
+}
   ]
 }

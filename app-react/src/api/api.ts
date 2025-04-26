@@ -26,116 +26,56 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerM
 /**
  * 
  * @export
- * @interface City
+ * @interface CityImport
  */
-export interface City {
+export interface CityImport {
     /**
      * 
-     * @type {string}
-     * @memberof City
+     * @type {number}
+     * @memberof CityImport
      */
-    'Id'?: string;
+    'Id'?: number;
     /**
      * 
      * @type {string}
-     * @memberof City
-     */
-    'Created'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof City
-     */
-    'Updated'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof City
-     */
-    'UpdatedBy'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof City
-     */
-    'CreatedBy'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof City
+     * @memberof CityImport
      */
     'Name'?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof City
+     * @memberof CityImport
      */
-    'Code'?: string | null;
+    'StateImportId'?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof City
+     * @memberof CityImport
      */
     'PostalCode'?: string | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof City
-     */
-    'Population'?: number;
 }
 /**
  * 
  * @export
- * @interface Country
+ * @interface CountryImport
  */
-export interface Country {
+export interface CountryImport {
+    /**
+     * 
+     * @type {number}
+     * @memberof CountryImport
+     */
+    'Id'?: number;
     /**
      * 
      * @type {string}
-     * @memberof Country
-     */
-    'Id'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Country
-     */
-    'Created'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Country
-     */
-    'Updated'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Country
-     */
-    'UpdatedBy'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Country
-     */
-    'CreatedBy'?: string;
-    /**
-     * 
-     * @type {Array<State>}
-     * @memberof Country
-     */
-    'States'?: Array<State> | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof Country
+     * @memberof CountryImport
      */
     'Name'?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof Country
+     * @memberof CountryImport
      */
     'Code'?: string | null;
 }
@@ -161,57 +101,27 @@ export interface GuidGenericResult {
 /**
  * 
  * @export
- * @interface State
+ * @interface StateImport
  */
-export interface State {
+export interface StateImport {
+    /**
+     * 
+     * @type {number}
+     * @memberof StateImport
+     */
+    'Id'?: number;
     /**
      * 
      * @type {string}
-     * @memberof State
-     */
-    'Id'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof State
-     */
-    'Created'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof State
-     */
-    'Updated'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof State
-     */
-    'UpdatedBy'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof State
-     */
-    'CreatedBy'?: string;
-    /**
-     * 
-     * @type {Array<City>}
-     * @memberof State
-     */
-    'Cities'?: Array<City> | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof State
+     * @memberof StateImport
      */
     'Name'?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof State
+     * @memberof StateImport
      */
-    'Code'?: string | null;
+    'CountryImportId'?: string | null;
 }
 /**
  * 
@@ -407,20 +317,19 @@ export class AuthApi extends BaseAPI {
 
 
 /**
- * EnumApi - axios parameter creator
+ * CitiesApi - axios parameter creator
  * @export
  */
-export const EnumApiAxiosParamCreator = function (configuration?: Configuration) {
+export const CitiesApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {number} [page] 
-         * @param {number} [pageSize] 
+         * @param {string} [name] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        enumEnumGetAllCitiesGet: async (page?: number, pageSize?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/Enum/Enum/GetAllCities`;
+        citiesCitiesGetAllGet: async (name?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/Cities/Cities/GetAll`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -432,46 +341,8 @@ export const EnumApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            if (page !== undefined) {
-                localVarQueryParameter['page'] = page;
-            }
-
-            if (pageSize !== undefined) {
-                localVarQueryParameter['pageSize'] = pageSize;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {string} [countryName] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        enumEnumGetAllCountriesGet: async (countryName?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/Enum/Enum/GetAllCountries`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            if (countryName !== undefined) {
-                localVarQueryParameter['countryName'] = countryName;
+            if (name !== undefined) {
+                localVarQueryParameter['name'] = name;
             }
 
 
@@ -489,97 +360,167 @@ export const EnumApiAxiosParamCreator = function (configuration?: Configuration)
 };
 
 /**
- * EnumApi - functional programming interface
+ * CitiesApi - functional programming interface
  * @export
  */
-export const EnumApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = EnumApiAxiosParamCreator(configuration)
+export const CitiesApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = CitiesApiAxiosParamCreator(configuration)
     return {
         /**
          * 
-         * @param {number} [page] 
-         * @param {number} [pageSize] 
+         * @param {string} [name] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async enumEnumGetAllCitiesGet(page?: number, pageSize?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<City>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.enumEnumGetAllCitiesGet(page, pageSize, options);
+        async citiesCitiesGetAllGet(name?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CityImport>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.citiesCitiesGetAllGet(name, options);
             const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['EnumApi.enumEnumGetAllCitiesGet']?.[index]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {string} [countryName] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async enumEnumGetAllCountriesGet(countryName?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Country>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.enumEnumGetAllCountriesGet(countryName, options);
-            const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['EnumApi.enumEnumGetAllCountriesGet']?.[index]?.url;
+            const operationBasePath = operationServerMap['CitiesApi.citiesCitiesGetAllGet']?.[index]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
     }
 };
 
 /**
- * EnumApi - factory interface
+ * CitiesApi - factory interface
  * @export
  */
-export const EnumApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = EnumApiFp(configuration)
+export const CitiesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = CitiesApiFp(configuration)
     return {
         /**
          * 
-         * @param {number} [page] 
-         * @param {number} [pageSize] 
+         * @param {string} [name] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        enumEnumGetAllCitiesGet(page?: number, pageSize?: number, options?: any): AxiosPromise<Array<City>> {
-            return localVarFp.enumEnumGetAllCitiesGet(page, pageSize, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} [countryName] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        enumEnumGetAllCountriesGet(countryName?: string, options?: any): AxiosPromise<Array<Country>> {
-            return localVarFp.enumEnumGetAllCountriesGet(countryName, options).then((request) => request(axios, basePath));
+        citiesCitiesGetAllGet(name?: string, options?: any): AxiosPromise<Array<CityImport>> {
+            return localVarFp.citiesCitiesGetAllGet(name, options).then((request) => request(axios, basePath));
         },
     };
 };
 
 /**
- * EnumApi - object-oriented interface
+ * CitiesApi - object-oriented interface
  * @export
- * @class EnumApi
+ * @class CitiesApi
  * @extends {BaseAPI}
  */
-export class EnumApi extends BaseAPI {
+export class CitiesApi extends BaseAPI {
     /**
      * 
-     * @param {number} [page] 
-     * @param {number} [pageSize] 
+     * @param {string} [name] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof EnumApi
+     * @memberof CitiesApi
      */
-    public enumEnumGetAllCitiesGet(page?: number, pageSize?: number, options?: AxiosRequestConfig) {
-        return EnumApiFp(this.configuration).enumEnumGetAllCitiesGet(page, pageSize, options).then((request) => request(this.axios, this.basePath));
+    public citiesCitiesGetAllGet(name?: string, options?: AxiosRequestConfig) {
+        return CitiesApiFp(this.configuration).citiesCitiesGetAllGet(name, options).then((request) => request(this.axios, this.basePath));
     }
+}
 
+
+
+/**
+ * CountryApi - axios parameter creator
+ * @export
+ */
+export const CountryApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {string} [name] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        countryCountryGetAllGet: async (name?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/Country/Country/GetAll`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (name !== undefined) {
+                localVarQueryParameter['name'] = name;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * CountryApi - functional programming interface
+ * @export
+ */
+export const CountryApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = CountryApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {string} [name] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async countryCountryGetAllGet(name?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CountryImport>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.countryCountryGetAllGet(name, options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['CountryApi.countryCountryGetAllGet']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * CountryApi - factory interface
+ * @export
+ */
+export const CountryApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = CountryApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {string} [name] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        countryCountryGetAllGet(name?: string, options?: any): AxiosPromise<Array<CountryImport>> {
+            return localVarFp.countryCountryGetAllGet(name, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * CountryApi - object-oriented interface
+ * @export
+ * @class CountryApi
+ * @extends {BaseAPI}
+ */
+export class CountryApi extends BaseAPI {
     /**
      * 
-     * @param {string} [countryName] 
+     * @param {string} [name] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof EnumApi
+     * @memberof CountryApi
      */
-    public enumEnumGetAllCountriesGet(countryName?: string, options?: AxiosRequestConfig) {
-        return EnumApiFp(this.configuration).enumEnumGetAllCountriesGet(countryName, options).then((request) => request(this.axios, this.basePath));
+    public countryCountryGetAllGet(name?: string, options?: AxiosRequestConfig) {
+        return CountryApiFp(this.configuration).countryCountryGetAllGet(name, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -693,6 +634,177 @@ export class LoginApi extends BaseAPI {
      */
     public login(username?: string, password?: string, options?: AxiosRequestConfig) {
         return LoginApiFp(this.configuration).login(username, password, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * StateApi - axios parameter creator
+ * @export
+ */
+export const StateApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {string} [countryId] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        stateStateGetAllByCountryGet: async (countryId?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/State/State/GetAllByCountry`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (countryId !== undefined) {
+                localVarQueryParameter['countryId'] = countryId;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} [name] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        stateStateGetAllGet: async (name?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/State/State/GetAll`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (name !== undefined) {
+                localVarQueryParameter['name'] = name;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * StateApi - functional programming interface
+ * @export
+ */
+export const StateApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = StateApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {string} [countryId] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async stateStateGetAllByCountryGet(countryId?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<StateImport>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.stateStateGetAllByCountryGet(countryId, options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['StateApi.stateStateGetAllByCountryGet']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} [name] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async stateStateGetAllGet(name?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<StateImport>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.stateStateGetAllGet(name, options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['StateApi.stateStateGetAllGet']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * StateApi - factory interface
+ * @export
+ */
+export const StateApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = StateApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {string} [countryId] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        stateStateGetAllByCountryGet(countryId?: string, options?: any): AxiosPromise<Array<StateImport>> {
+            return localVarFp.stateStateGetAllByCountryGet(countryId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} [name] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        stateStateGetAllGet(name?: string, options?: any): AxiosPromise<Array<StateImport>> {
+            return localVarFp.stateStateGetAllGet(name, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * StateApi - object-oriented interface
+ * @export
+ * @class StateApi
+ * @extends {BaseAPI}
+ */
+export class StateApi extends BaseAPI {
+    /**
+     * 
+     * @param {string} [countryId] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StateApi
+     */
+    public stateStateGetAllByCountryGet(countryId?: string, options?: AxiosRequestConfig) {
+        return StateApiFp(this.configuration).stateStateGetAllByCountryGet(countryId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} [name] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StateApi
+     */
+    public stateStateGetAllGet(name?: string, options?: AxiosRequestConfig) {
+        return StateApiFp(this.configuration).stateStateGetAllGet(name, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

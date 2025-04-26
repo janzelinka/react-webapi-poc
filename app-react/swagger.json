@@ -63,72 +63,14 @@
         }
       }
     },
-    "/Enum/Enum/GetAllCities": {
+    "/Cities/Cities/GetAll": {
       "get": {
         "tags": [
-          "Enum"
+          "Cities"
         ],
         "parameters": [
           {
-            "name": "page",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
-          },
-          {
-            "name": "pageSize",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 20
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/City"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/City"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/City"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/Enum/Enum/GetAllCountries": {
-      "get": {
-        "tags": [
-          "Enum"
-        ],
-        "parameters": [
-          {
-            "name": "countryName",
+            "name": "name",
             "in": "query",
             "schema": {
               "type": "string"
@@ -143,7 +85,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Country"
+                    "$ref": "#/components/schemas/CityImport"
                   }
                 }
               },
@@ -151,7 +93,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Country"
+                    "$ref": "#/components/schemas/CityImport"
                   }
                 }
               },
@@ -159,7 +101,54 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Country"
+                    "$ref": "#/components/schemas/CityImport"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Country/Country/GetAll": {
+      "get": {
+        "tags": [
+          "Country"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CountryImport"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CountryImport"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CountryImport"
                   }
                 }
               }
@@ -193,6 +182,100 @@
         "responses": {
           "200": {
             "description": "Success"
+          }
+        }
+      }
+    },
+    "/State/State/GetAllByCountry": {
+      "get": {
+        "tags": [
+          "State"
+        ],
+        "parameters": [
+          {
+            "name": "countryId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StateImport"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StateImport"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StateImport"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/State/State/GetAll": {
+      "get": {
+        "tags": [
+          "State"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StateImport"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StateImport"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StateImport"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -365,77 +448,34 @@
   },
   "components": {
     "schemas": {
-      "City": {
+      "CityImport": {
         "type": "object",
         "properties": {
           "Id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "Created": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "Updated": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "UpdatedBy": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "CreatedBy": {
-            "type": "string",
-            "format": "uuid"
+            "type": "integer",
+            "format": "int32"
           },
           "Name": {
             "type": "string",
             "nullable": true
           },
-          "Code": {
+          "StateImportId": {
             "type": "string",
             "nullable": true
           },
           "PostalCode": {
             "type": "string",
             "nullable": true
-          },
-          "Population": {
-            "type": "integer",
-            "format": "int32"
           }
         },
         "additionalProperties": false
       },
-      "Country": {
+      "CountryImport": {
         "type": "object",
         "properties": {
           "Id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "Created": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "Updated": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "UpdatedBy": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "CreatedBy": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "States": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/State"
-            },
-            "nullable": true
+            "type": "integer",
+            "format": "int32"
           },
           "Name": {
             "type": "string",
@@ -469,41 +509,18 @@
         },
         "additionalProperties": false
       },
-      "State": {
+      "StateImport": {
         "type": "object",
         "properties": {
           "Id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "Created": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "Updated": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "UpdatedBy": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "CreatedBy": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "Cities": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/City"
-            },
-            "nullable": true
+            "type": "integer",
+            "format": "int32"
           },
           "Name": {
             "type": "string",
             "nullable": true
           },
-          "Code": {
+          "CountryImportId": {
             "type": "string",
             "nullable": true
           }

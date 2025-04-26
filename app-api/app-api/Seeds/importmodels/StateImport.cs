@@ -1,13 +1,19 @@
 
 using Newtonsoft.Json;
 
-public class StateImport {
+public class BaseImport
+{
+    [JsonProperty("id")]
+    public int Id { get; set; }
+
     [JsonProperty("name")]
-    public string Name {get;set;}= string.Empty;
+    public string Name { get; set; } = string.Empty;
+
+}
+public class StateImport : BaseImport
+{
 
     [JsonProperty("country_id")]
-    public string CountryImportId {get;set;} = string.Empty;
+    public string CountryImportId { get; set; } = string.Empty;
 
-    [JsonProperty("id")]
-    public string StateImportId {get;set;} = string.Empty;
 }

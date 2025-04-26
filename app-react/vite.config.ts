@@ -20,6 +20,18 @@ export default defineConfig({
         target: `http://0.0.0.0:${PORT}`,
         secure: false,
       }, // Your A
+      "/Country": {
+        target: `http://0.0.0.0:${PORT}`,
+        secure: false,
+      }, // Your A
+      "/State": {
+        target: `http://0.0.0.0:${PORT}`,
+        secure: false,
+      }, // Your A
+      "/Cities": {
+        target: `http://0.0.0.0:${PORT}`,
+        secure: false,
+      }, // Your A
     },
   },
 });

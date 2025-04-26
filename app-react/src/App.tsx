@@ -11,7 +11,13 @@ import { PrivateRoute } from "./routes/Routes";
 import { store } from "./stores/store";
 import { handleRedirectWhenNotAuthenticated } from "./helpers/helpers";
 import axios, { AxiosError } from "axios";
-import { LoginApi, AuthApi, UsersApi /*EnumApi */, EnumApi } from "./api";
+import {
+  LoginApi,
+  AuthApi,
+  UsersApi /*EnumApi */,
+  EnumApi,
+  CountryApi,
+} from "./api";
 
 /* API CLIENTS */
 const baseUrl = "http://localhost:5173";
@@ -45,7 +51,7 @@ export const usersApi = new UsersApi(
   apiClient
 );
 
-export const enumApi = new EnumApi(
+export const enumApi = new CountryApi(
   {
     isJsonMime: () => true,
   },

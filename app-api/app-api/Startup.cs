@@ -4,8 +4,6 @@ using app.Services;
 using appapi.Factories;
 using appapi.Seeds;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Serilog;
-using Serilog.Sinks.Elasticsearch;
 
 public class Startup
 {
@@ -47,9 +45,6 @@ public class Startup
         services.AddTransient<IElasticFactory, ElasticFactory>();
 
         services.AddTransient<IUserRepository, UserRepository>();
-        services.AddTransient<ICountryRepository, CountryRepository>();
-        services.AddTransient<ICityRepository, CityRepository>();
-        services.AddTransient<IStateRepository, StateRepository>();
         services.AddTransient<CitiesSeeder>();
         services.AddTransient<IAuthService, AuthService>();
         services.AddTransient<IUsersService, UsersService>();

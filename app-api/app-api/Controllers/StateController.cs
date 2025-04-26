@@ -16,14 +16,29 @@ namespace app_api.Controllers
     [Route("[controller]")]
     public class StateController : BaseEnumController<StateImport>
     {
+        private readonly IElasticFactory elasticFactory;
+
         public StateController(IElasticFactory elasticFactory) : base("states", elasticFactory)
         {
-
+            this.elasticFactory = elasticFactory;
         }
 
 
+        [HttpGet]
+        [Route("[controller]/GetAllByCountry")]
+        public IEnumerable<StateImport> GetStatesByCountry([FromQuery] string countryId)
+        {
+            var all = elasticFactory.CreateElasticClient("states").Search<StateImport>(s => s
+                .Query(q => q
+                    .QueryString(qs => qs
+                        .Fields(f => f.Field(ff => ff.CountryImportId))
+                        .Query(countryId)
+                    )
+                )
+            );
 
-
+            return all.Documents.ToList();
+        }
 
     }
 }
