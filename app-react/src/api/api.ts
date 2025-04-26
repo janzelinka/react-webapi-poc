@@ -67,12 +67,6 @@ export interface City {
     'Name'?: string | null;
     /**
      * 
-     * @type {District}
-     * @memberof City
-     */
-    'District'?: District;
-    /**
-     * 
      * @type {string}
      * @memberof City
      */
@@ -128,10 +122,10 @@ export interface Country {
     'CreatedBy'?: string;
     /**
      * 
-     * @type {Array<Region>}
+     * @type {Array<State>}
      * @memberof Country
      */
-    'Regions'?: Array<Region> | null;
+    'States'?: Array<State> | null;
     /**
      * 
      * @type {string}
@@ -142,67 +136,6 @@ export interface Country {
      * 
      * @type {string}
      * @memberof Country
-     */
-    'Code'?: string | null;
-}
-/**
- * 
- * @export
- * @interface District
- */
-export interface District {
-    /**
-     * 
-     * @type {string}
-     * @memberof District
-     */
-    'Id'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof District
-     */
-    'Created'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof District
-     */
-    'Updated'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof District
-     */
-    'UpdatedBy'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof District
-     */
-    'CreatedBy'?: string;
-    /**
-     * 
-     * @type {Array<City>}
-     * @memberof District
-     */
-    'Cities'?: Array<City> | null;
-    /**
-     * 
-     * @type {Region}
-     * @memberof District
-     */
-    'Region'?: Region;
-    /**
-     * 
-     * @type {string}
-     * @memberof District
-     */
-    'Name'?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof District
      */
     'Code'?: string | null;
 }
@@ -228,61 +161,55 @@ export interface GuidGenericResult {
 /**
  * 
  * @export
- * @interface Region
+ * @interface State
  */
-export interface Region {
+export interface State {
     /**
      * 
      * @type {string}
-     * @memberof Region
+     * @memberof State
      */
     'Id'?: string;
     /**
      * 
      * @type {string}
-     * @memberof Region
+     * @memberof State
      */
     'Created'?: string;
     /**
      * 
      * @type {string}
-     * @memberof Region
+     * @memberof State
      */
     'Updated'?: string;
     /**
      * 
      * @type {string}
-     * @memberof Region
+     * @memberof State
      */
     'UpdatedBy'?: string;
     /**
      * 
      * @type {string}
-     * @memberof Region
+     * @memberof State
      */
     'CreatedBy'?: string;
     /**
      * 
-     * @type {Array<District>}
-     * @memberof Region
+     * @type {Array<City>}
+     * @memberof State
      */
-    'Districts'?: Array<District> | null;
-    /**
-     * 
-     * @type {Country}
-     * @memberof Region
-     */
-    'Country'?: Country;
+    'Cities'?: Array<City> | null;
     /**
      * 
      * @type {string}
-     * @memberof Region
+     * @memberof State
      */
     'Name'?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof Region
+     * @memberof State
      */
     'Code'?: string | null;
 }
@@ -526,10 +453,11 @@ export const EnumApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @param {string} [countryName] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        enumEnumGetAllCountriesGet: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        enumEnumGetAllCountriesGet: async (countryName?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/Enum/Enum/GetAllCountries`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -542,34 +470,9 @@ export const EnumApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        enumEnumGetAllDistrictsGet: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/Enum/Enum/GetAllDistricts`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
+            if (countryName !== undefined) {
+                localVarQueryParameter['countryName'] = countryName;
             }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
 
 
     
@@ -607,24 +510,14 @@ export const EnumApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {string} [countryName] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async enumEnumGetAllCountriesGet(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Country>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.enumEnumGetAllCountriesGet(options);
+        async enumEnumGetAllCountriesGet(countryName?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Country>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.enumEnumGetAllCountriesGet(countryName, options);
             const index = configuration?.serverIndex ?? 0;
             const operationBasePath = operationServerMap['EnumApi.enumEnumGetAllCountriesGet']?.[index]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async enumEnumGetAllDistrictsGet(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<District>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.enumEnumGetAllDistrictsGet(options);
-            const index = configuration?.serverIndex ?? 0;
-            const operationBasePath = operationServerMap['EnumApi.enumEnumGetAllDistrictsGet']?.[index]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
     }
@@ -649,19 +542,12 @@ export const EnumApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @param {string} [countryName] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        enumEnumGetAllCountriesGet(options?: any): AxiosPromise<Array<Country>> {
-            return localVarFp.enumEnumGetAllCountriesGet(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        enumEnumGetAllDistrictsGet(options?: any): AxiosPromise<Array<District>> {
-            return localVarFp.enumEnumGetAllDistrictsGet(options).then((request) => request(axios, basePath));
+        enumEnumGetAllCountriesGet(countryName?: string, options?: any): AxiosPromise<Array<Country>> {
+            return localVarFp.enumEnumGetAllCountriesGet(countryName, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -687,22 +573,13 @@ export class EnumApi extends BaseAPI {
 
     /**
      * 
+     * @param {string} [countryName] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof EnumApi
      */
-    public enumEnumGetAllCountriesGet(options?: AxiosRequestConfig) {
-        return EnumApiFp(this.configuration).enumEnumGetAllCountriesGet(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof EnumApi
-     */
-    public enumEnumGetAllDistrictsGet(options?: AxiosRequestConfig) {
-        return EnumApiFp(this.configuration).enumEnumGetAllDistrictsGet(options).then((request) => request(this.axios, this.basePath));
+    public enumEnumGetAllCountriesGet(countryName?: string, options?: AxiosRequestConfig) {
+        return EnumApiFp(this.configuration).enumEnumGetAllCountriesGet(countryName, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
