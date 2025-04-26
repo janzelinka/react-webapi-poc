@@ -11,12 +11,13 @@ import { PrivateRoute } from "./routes/Routes";
 import { store } from "./stores/store";
 import { handleRedirectWhenNotAuthenticated } from "./helpers/helpers";
 import axios, { AxiosError } from "axios";
-import { LoginApi, AuthApi, UsersApi, /*EnumApi */} from "./api";
+import { LoginApi, AuthApi, UsersApi /*EnumApi */, EnumApi } from "./api";
 
 /* API CLIENTS */
+const baseUrl = "http://localhost:5173";
 
 const apiClient = axios.create({
-  baseURL: "http://localhost:5173",
+  baseURL: baseUrl,
   withCredentials: true,
 });
 
@@ -24,7 +25,7 @@ const loginApi = new LoginApi(
   {
     isJsonMime: () => true,
   },
-  "http://localhost:5173",
+  baseUrl,
   apiClient
 );
 
@@ -32,7 +33,7 @@ export const authApi = new AuthApi(
   {
     isJsonMime: () => true,
   },
-  "http://localhost:5173",
+  baseUrl,
   apiClient
 );
 
@@ -40,16 +41,17 @@ export const usersApi = new UsersApi(
   {
     isJsonMime: () => true,
   },
+  baseUrl,
+  apiClient
+);
+
+export const enumApi = new EnumApi(
+  {
+    isJsonMime: () => true,
+  },
   "http://localhost:5173",
   apiClient
 );
-// const enumApi = new EnumApi(
-//   {
-//     isJsonMime: () => true,
-//   },
-//   "http://localhost:5173",
-//   apiClient
-// );
 
 /* API CLIENTS END */
 
@@ -63,7 +65,6 @@ apiClient.interceptors.response.use(
 );
 
 export default class App extends React.Component {
-
   componentDidMount(): void {
     // enumApi.enumEnumGetAllCountriesGet().then((result) => {
     //   console.log(result)
@@ -96,7 +97,10 @@ export default class App extends React.Component {
                 </PrivateRoute>
               }
             />
-            <Route path="/register" element={<RegisterForm usersApi={usersApi}/>} />
+            <Route
+              path="/register"
+              element={<RegisterForm usersApi={usersApi} />}
+            />
           </Routes>
         </AuthProvider>
       </Provider>
