@@ -14,6 +14,7 @@ import Container from "@mui/material/Container";
 import { useAppDispatch, useAppSelector } from "../stores/store";
 import { signUp as signUpAction } from "../features/login";
 import { UsersApi } from "../api";
+import CountryAutocomplete from "../components/Autocompletes/CountryAutocomplete";
 
 export const RegisterForm = ({ usersApi }: { usersApi: UsersApi }) => {
   const dispatch = useAppDispatch();
@@ -22,16 +23,18 @@ export const RegisterForm = ({ usersApi }: { usersApi: UsersApi }) => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // event.
-    usersApi.usersCreatePost({
-      Email: signUp.Email,
-      FirstName: signUp.FirstName,
-      LastName: signUp.LastName,
-      Password: signUp.Password
-    }).then((response) => {
-      if (response.status == 200) {
-        alert("success")
-      }
-    });
+    usersApi
+      .usersCreatePost({
+        Email: signUp.Email,
+        FirstName: signUp.FirstName,
+        LastName: signUp.LastName,
+        Password: signUp.Password,
+      })
+      .then((response) => {
+        if (response.status == 200) {
+          alert("success");
+        }
+      });
     console.log(signUp);
   };
 
@@ -54,7 +57,7 @@ export const RegisterForm = ({ usersApi }: { usersApi: UsersApi }) => {
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
-            <Grid  size={{xs:12, sm:6}}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <TextField
                 autoComplete="given-name"
                 name="firstName"
@@ -71,7 +74,7 @@ export const RegisterForm = ({ usersApi }: { usersApi: UsersApi }) => {
                 }
               />
             </Grid>
-            <Grid size={{xs:12, sm:6}}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <TextField
                 required
                 fullWidth
@@ -87,7 +90,7 @@ export const RegisterForm = ({ usersApi }: { usersApi: UsersApi }) => {
                 }
               />
             </Grid>
-            <Grid  size={{xs:12, sm:6}}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 required
                 fullWidth
@@ -103,7 +106,7 @@ export const RegisterForm = ({ usersApi }: { usersApi: UsersApi }) => {
                 }
               />
             </Grid>
-            <Grid  size={{xs:12, sm:6}}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 required
                 fullWidth
@@ -120,7 +123,10 @@ export const RegisterForm = ({ usersApi }: { usersApi: UsersApi }) => {
                 }
               />
             </Grid>
-            <Grid  size={{xs:12, sm:6}}>
+            <Grid size={{ xs: 12 }}>
+              <CountryAutocomplete />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 12 }}>
               <FormControlLabel
                 control={<Checkbox value="allowExtraEmails" color="primary" />}
                 label="I want to receive inspiration, marketing promotions and updates via email."
