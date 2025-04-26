@@ -1,5 +1,5 @@
 import { Box, Button, Modal, Paper, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { JSX, useEffect, useState } from 'react';
 
 interface ModalProps {
   form: JSX.Element;
