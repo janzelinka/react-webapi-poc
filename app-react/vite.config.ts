@@ -8,30 +8,10 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      "/Login": {
+      "^/[A-Z]{1}[a-z]+": {
         target: `http://0.0.0.0:${PORT}`,
         secure: false,
       }, // Your API server address
-      "/Auth": {
-        target: `http://0.0.0.0:${PORT}`,
-        secure: false,
-      }, // Your A
-      "/Enum": {
-        target: `http://0.0.0.0:${PORT}`,
-        secure: false,
-      }, // Your A
-      "/Country": {
-        target: `http://0.0.0.0:${PORT}`,
-        secure: false,
-      }, // Your A
-      "/State": {
-        target: `http://0.0.0.0:${PORT}`,
-        secure: false,
-      }, // Your A
-      "/Cities": {
-        target: `http://0.0.0.0:${PORT}`,
-        secure: false,
-      }, // Your A
     },
   },
 });

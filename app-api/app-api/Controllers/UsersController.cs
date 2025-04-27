@@ -1,9 +1,9 @@
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authentication;
+using api.Controllers;
 using api.ViewModels;
 using app.Services;
-using api.Controllers;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace app_api.Controllers
 {
@@ -13,16 +13,6 @@ namespace app_api.Controllers
     {
         public UsersController(IUsersService viewService) : base(viewService)
         {
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
-        [Route("[controller]/GetAll")]
-        public override IEnumerable<UsersViewModel> GetAll()
-        {
-            //example of allow anonymous, overriden
-            //however only one endpoint will be used -> the base one will be replaced by this one
-            return base.GetAll();
         }
 
         // [HttpGet]

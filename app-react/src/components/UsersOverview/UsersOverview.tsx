@@ -26,7 +26,8 @@ export const UsersOverview = ({ usersApi }: { usersApi: UsersApi }) => {
   const register = useAppSelector((state) => state.register);
 
   useEffect(() => {
-    usersApi.usersGetAllGet()
+    usersApi
+      .usersGetAllGet()
       .then((result) => {
         setUsers(result.data);
       })
@@ -66,7 +67,7 @@ export const UsersOverview = ({ usersApi }: { usersApi: UsersApi }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {users.map((user) => (
+            {(users ?? []).map((user) => (
               <TableRow
                 key={user.Id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
