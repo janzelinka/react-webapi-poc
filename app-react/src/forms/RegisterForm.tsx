@@ -14,7 +14,8 @@ import Container from "@mui/material/Container";
 import { useAppDispatch, useAppSelector } from "../stores/store";
 import { signUp as signUpAction } from "../features/login";
 import { UsersApi } from "../api";
-import CountryAutocomplete from "../components/Autocompletes/CountryAutocomplete";
+import GenericAutocomplete from "../components/Autocompletes/CountryAutocomplete";
+import { citiesApi, countryApi, statesApi } from "../App";
 
 export const RegisterForm = ({ usersApi }: { usersApi: UsersApi }) => {
   const dispatch = useAppDispatch();
@@ -124,8 +125,24 @@ export const RegisterForm = ({ usersApi }: { usersApi: UsersApi }) => {
               />
             </Grid>
             <Grid size={{ xs: 12 }}>
-              <CountryAutocomplete />
+              <GenericAutocomplete
+                getAll={(filter) => countryApi.countryCountryGetAllGet(filter)}
+                label="Country"
+              />
             </Grid>
+            <Grid size={{ xs: 12 }}>
+              <GenericAutocomplete
+                label="Cities"
+                getAll={(filter) => citiesApi.citiesCitiesGetAllGet(filter)}
+              />
+            </Grid>
+            <Grid size={{ xs: 12 }}>
+              <GenericAutocomplete
+                label="States"
+                getAll={(filter) => statesApi.stateStateGetAllGet(filter)}
+              />
+            </Grid>
+            <Grid size={{ xs: 12 }}>{/* <CountryAutocomplete /> */}</Grid>
             <Grid size={{ xs: 12, sm: 12 }}>
               <FormControlLabel
                 control={<Checkbox value="allowExtraEmails" color="primary" />}

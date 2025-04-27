@@ -15,8 +15,9 @@ import {
   LoginApi,
   AuthApi,
   UsersApi /*EnumApi */,
-  EnumApi,
   CountryApi,
+  StateApi,
+  CitiesApi,
 } from "./api";
 
 /* API CLIENTS */
@@ -51,11 +52,27 @@ export const usersApi = new UsersApi(
   apiClient
 );
 
-export const enumApi = new CountryApi(
+export const countryApi = new CountryApi(
   {
     isJsonMime: () => true,
   },
-  "http://localhost:5173",
+  baseUrl,
+  apiClient
+);
+
+export const statesApi = new StateApi(
+  {
+    isJsonMime: () => true,
+  },
+  baseUrl,
+  apiClient
+);
+
+export const citiesApi = new CitiesApi(
+  {
+    isJsonMime: () => true,
+  },
+  baseUrl,
   apiClient
 );
 

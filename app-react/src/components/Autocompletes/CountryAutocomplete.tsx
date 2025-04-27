@@ -1,22 +1,35 @@
 import { Autocomplete, TextField } from "@mui/material";
-import { enumApi } from "../../App";
 import { useEffect, useState } from "react";
-import { CountryImport } from "../../api";
+import { AxiosPromise } from "axios";
 
-function CountryAutocomplete() {
-  const [countries, setCountries] = useState<CountryImport[]>([]);
+interface BaseImport {
+  Id?: number;
+  Name?: string | null;
+}
+
+function GenericAutocomplete({
+  getAll,
+  label,
+}: {
+  getAll: (filter: string) => AxiosPromise<BaseImport[]>;
+  label: string;
+}) {
+  const [items, setItems] = useState<BaseImport[]>([]);
   const [filter, setFilter] = useState<string>("");
 
   useEffect(() => {
-    enumApi.countryCountryGetAllGet(filter).then((result) => {
-      setCountries(result.data);
-    });
-  }, [filter]);
+    // countryApi.countryCountryGetAllGet(filter).then((result) => {
+    //   setCountries(result.data);
+    // });
+    getAll(filter)
+      .then((c) => setItems(c.data))
+      .catch(console.error);
+  }, [filter, getAll]);
 
   return (
     <Autocomplete
       options={
-        countries?.map((country) => ({
+        items?.map((country) => ({
           id: country.Id,
           label: country.Name,
         })) ?? []
@@ -31,11 +44,11 @@ function CountryAutocomplete() {
         <TextField
           onChange={(e) => setFilter(e.target.value)}
           {...params}
-          label="Country"
+          label={label}
         />
       )}
     />
   );
 }
 
-export default CountryAutocomplete;
+export default GenericAutocomplete;
